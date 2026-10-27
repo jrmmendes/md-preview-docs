@@ -1,0 +1,850 @@
+/**
+ * Tema visual do site — Gruvbox (claro e escuro).
+ *
+ * Paleta oficial: https://github.com/morhetz/gruvbox
+ *   light: bg #fbf1c7 · surface #f2e5bc · fg #3c3836
+ *   dark:  bg #282828 · surface #32302f · fg #ebdbb2
+ *
+ * As variáveis `--mdprv-*` são o vocabulário curto usado também pela landing
+ * (`src/pages/index.module.css`). As variáveis `--ifm-*` são o contrato do
+ * Infima/Docusaurus.
+ */
+
+/* ---------------------------------------------------------------------------
+ * Modo claro (padrão)
+ * ------------------------------------------------------------------------ */
+
+:root {
+  color-scheme: light;
+
+  /* Cores do tema, em nomes curtos. */
+  --mdprv-bg: #fbf1c7;
+  --mdprv-surface: #f2e5bc;
+  --mdprv-surface-strong: #ebdbb2;
+  --mdprv-border: #ebdbb2;
+  --mdprv-border-strong: #d5c4a1;
+  --mdprv-fg: #3c3836;
+  --mdprv-fg-strong: #282828;
+  --mdprv-muted: #665c54;
+  --mdprv-gray: #928374;
+  --mdprv-red: #9d0006;
+  --mdprv-green: #79740e;
+  --mdprv-yellow: #b57614;
+  --mdprv-blue: #076678;
+  --mdprv-purple: #8f3f71;
+  --mdprv-aqua: #427b58;
+  --mdprv-orange: #af3a03;
+
+  /* Superfícies e efeitos derivados. */
+  --mdprv-code-bg: #f2e5bc;
+  --mdprv-code-border: rgba(60, 56, 54, 0.14);
+  --mdprv-chip-bg: rgba(7, 102, 120, 0.12);
+  --mdprv-glow-a: rgba(7, 102, 120, 0.16);
+  --mdprv-glow-b: rgba(121, 116, 14, 0.14);
+  --mdprv-shadow: 0 1px 2px rgba(60, 56, 54, 0.1);
+
+  /* Terminal decorativo (sempre no Gruvbox escuro). */
+  --mdprv-terminal-bg: #282828;
+  --mdprv-terminal-bar: #32302f;
+  --mdprv-terminal-border: #3c3836;
+  --mdprv-terminal-fg: #ebdbb2;
+  --mdprv-terminal-muted: #a89984;
+  --mdprv-terminal-prompt: #b8bb26;
+  --mdprv-terminal-url: #83a598;
+
+  /* Marca / accent: azul do Gruvbox claro. */
+  --ifm-color-primary: #076678;
+  --ifm-color-primary-dark: #065a6a;
+  --ifm-color-primary-darker: #055260;
+  --ifm-color-primary-darkest: #04434f;
+  --ifm-color-primary-light: #257888;
+  --ifm-color-primary-lighter: #438b98;
+  --ifm-color-primary-lightest: #6fa6b1;
+  --ifm-color-primary-contrast-background: #d9debc;
+  --ifm-color-primary-contrast-foreground: #04434f;
+
+  /* Paleta semântica (admonitions, badges). */
+  --ifm-color-secondary: #ebdbb2;
+  --ifm-color-secondary-dark: #e0d0a4;
+  --ifm-color-secondary-darker: #d9c79c;
+  --ifm-color-secondary-darkest: #c9b583;
+  --ifm-color-secondary-light: #f4eac4;
+  --ifm-color-secondary-lighter: #f6eecd;
+  --ifm-color-secondary-lightest: #fbf5e1;
+  --ifm-color-secondary-contrast-background: #f6ecd0;
+  --ifm-color-secondary-contrast-foreground: #433f37;
+
+  --ifm-color-info: #076678;
+  --ifm-color-info-dark: #065a6a;
+  --ifm-color-info-darker: #055260;
+  --ifm-color-info-darkest: #04434f;
+  --ifm-color-info-light: #257888;
+  --ifm-color-info-lighter: #438b98;
+  --ifm-color-info-lightest: #6fa6b1;
+  --ifm-color-info-contrast-background: #d9debc;
+  --ifm-color-info-contrast-foreground: #05505e;
+
+  --ifm-color-success: #427b58;
+  --ifm-color-success-dark: #3a6c4d;
+  --ifm-color-success-darker: #346246;
+  --ifm-color-success-darkest: #2a503a;
+  --ifm-color-success-light: #4f8f67;
+  --ifm-color-success-lighter: #579a70;
+  --ifm-color-success-lightest: #74ad8a;
+  --ifm-color-success-contrast-background: #e1e0b7;
+  --ifm-color-success-contrast-foreground: #336045;
+
+  --ifm-color-warning: #af3a03;
+  --ifm-color-warning-dark: #9a3303;
+  --ifm-color-warning-darker: #8c2e02;
+  --ifm-color-warning-darkest: #702501;
+  --ifm-color-warning-light: #c44305;
+  --ifm-color-warning-lighter: #d34a06;
+  --ifm-color-warning-lightest: #e9601a;
+  --ifm-color-warning-contrast-background: #f0d7ac;
+  --ifm-color-warning-contrast-foreground: #892d02;
+
+  --ifm-color-danger: #9d0006;
+  --ifm-color-danger-dark: #880005;
+  --ifm-color-danger-darker: #7a0005;
+  --ifm-color-danger-darkest: #620004;
+  --ifm-color-danger-light: #b70007;
+  --ifm-color-danger-lighter: #c50008;
+  --ifm-color-danger-lightest: #e10009;
+  --ifm-color-danger-contrast-background: #eecfac;
+  --ifm-color-danger-contrast-foreground: #7a0005;
+
+  /* Escala neutra quente, do fundo ao texto. */
+  --ifm-color-emphasis-0: #fbf1c7;
+  --ifm-color-emphasis-100: #f5eac1;
+  --ifm-color-emphasis-200: #ebdbb2;
+  --ifm-color-emphasis-300: #d5c4a1;
+  --ifm-color-emphasis-400: #bdae93;
+  --ifm-color-emphasis-500: #a89984;
+  --ifm-color-emphasis-600: #7c6f64;
+  --ifm-color-emphasis-700: #665c54;
+  --ifm-color-emphasis-800: #504945;
+  --ifm-color-emphasis-900: #3c3836;
+  --ifm-color-emphasis-1000: #282828;
+
+  /* Base. */
+  --ifm-background-color: var(--mdprv-bg);
+  --ifm-background-surface-color: var(--mdprv-surface);
+  --ifm-font-color-base: var(--mdprv-fg);
+  --ifm-font-color-secondary: var(--mdprv-muted);
+  --ifm-heading-color: var(--mdprv-fg-strong);
+  --ifm-color-content: var(--mdprv-fg);
+  --ifm-color-content-inverse: var(--mdprv-bg);
+  --ifm-color-content-secondary: var(--mdprv-muted);
+  --ifm-hover-overlay: rgba(60, 56, 54, 0.06);
+
+  /* Links. */
+  --ifm-link-color: var(--mdprv-blue);
+  --ifm-link-hover-color: #04434f;
+  --ifm-link-decoration: none;
+  --ifm-link-hover-decoration: none;
+
+  /* Navegação. */
+  --ifm-navbar-background-color: rgba(242, 229, 188, 0.94);
+  --ifm-navbar-link-color: var(--mdprv-fg);
+  --ifm-navbar-link-hover-color: var(--mdprv-blue);
+  --ifm-navbar-link-active-color: var(--mdprv-blue);
+  --ifm-navbar-shadow: none;
+  --ifm-menu-color: var(--mdprv-muted);
+  --ifm-menu-color-active: var(--mdprv-blue);
+  --ifm-menu-color-background-active: rgba(7, 102, 120, 0.1);
+  --ifm-menu-color-background-hover: rgba(60, 56, 54, 0.06);
+  --ifm-toc-border-color: var(--mdprv-border-strong);
+  --ifm-toc-link-color: var(--mdprv-muted);
+  --ifm-breadcrumb-color-active: var(--mdprv-blue);
+  --ifm-breadcrumb-item-background-active: rgba(7, 102, 120, 0.1);
+
+  /* Tabelas. */
+  --ifm-table-border-color: var(--mdprv-border-strong);
+  --ifm-table-cell-padding: 0.7rem 0.95rem;
+  --ifm-table-head-background: var(--mdprv-surface-strong);
+  --ifm-table-head-color: var(--mdprv-fg);
+  --ifm-table-cell-color: var(--mdprv-fg);
+  --ifm-table-stripe-background: rgba(60, 56, 54, 0.04);
+
+  /* Blocos de citação. */
+  --ifm-blockquote-color: var(--mdprv-muted);
+  --ifm-blockquote-border-color: var(--mdprv-yellow);
+  --ifm-blockquote-border-left-width: 4px;
+  --ifm-blockquote-padding-horizontal: 1.15rem;
+  --ifm-blockquote-padding-vertical: 0.85rem;
+  --ifm-blockquote-shadow: none;
+
+  /* Código. */
+  --ifm-code-background: var(--mdprv-surface-strong);
+  --ifm-code-border-radius: 4px;
+  --ifm-code-font-size: 90%;
+  --ifm-code-padding-horizontal: 0.35em;
+  --ifm-code-padding-vertical: 0.15em;
+  --ifm-pre-background: var(--mdprv-code-bg);
+  --ifm-pre-border-radius: 10px;
+  --ifm-pre-padding: 1.25rem;
+  --ifm-pre-line-height: 1.65;
+  --docusaurus-highlighted-code-line-bg: rgba(7, 102, 120, 0.14);
+
+  /* Admonitions. */
+  --ifm-alert-border-radius: 8px;
+  --ifm-alert-border-left-width: 4px;
+  --ifm-alert-padding-horizontal: 1.15rem;
+  --ifm-alert-padding-vertical: 1rem;
+  --ifm-alert-shadow: none;
+
+  /* Forma e tipografia. */
+  --ifm-font-family-base: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --ifm-font-family-monospace: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  --ifm-line-height-base: 1.7;
+  --ifm-heading-font-weight: 700;
+  --ifm-global-radius: 8px;
+  --ifm-global-shadow-lw: var(--mdprv-shadow);
+  --ifm-scrollbar-track-background-color: #ebdbb2;
+  --ifm-scrollbar-thumb-background-color: #bdae93;
+  --ifm-scrollbar-thumb-hover-background-color: #a89984;
+
+  /* Rodapé: sempre no Gruvbox escuro (footer--dark na config). */
+  --ifm-footer-background-color: #282828;
+  --ifm-footer-color: #d5c4a1;
+  --ifm-footer-link-color: #d5c4a1;
+  --ifm-footer-link-hover-color: #b8bb26;
+  --ifm-footer-title-color: #fbf1c7;
+}
+
+/* ---------------------------------------------------------------------------
+ * Modo escuro
+ * ------------------------------------------------------------------------ */
+
+/* A especificidade precisa empatar com `html[data-theme='dark']` do Infima
+ * (carregado antes) para os tokens vencerem por ordem. */
+html[data-theme='dark'] {
+  color-scheme: dark;
+
+  --mdprv-bg: #282828;
+  --mdprv-surface: #32302f;
+  --mdprv-surface-strong: #3c3836;
+  --mdprv-border: #3c3836;
+  --mdprv-border-strong: #504945;
+  --mdprv-fg: #ebdbb2;
+  --mdprv-fg-strong: #fbf1c7;
+  --mdprv-muted: #a89984;
+  --mdprv-gray: #928374;
+  --mdprv-red: #fb4934;
+  --mdprv-green: #b8bb26;
+  --mdprv-yellow: #fabd2f;
+  --mdprv-blue: #83a598;
+  --mdprv-purple: #d3869b;
+  --mdprv-aqua: #8ec07c;
+  --mdprv-orange: #fe8019;
+
+  --mdprv-code-bg: #32302f;
+  --mdprv-code-border: #3c3836;
+  --mdprv-chip-bg: rgba(131, 165, 152, 0.18);
+  --mdprv-glow-a: rgba(131, 165, 152, 0.14);
+  --mdprv-glow-b: rgba(184, 187, 38, 0.1);
+  --mdprv-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+
+  /* O terminal sobe um degrau para não sumir no fundo #282828. */
+  --mdprv-terminal-bg: #32302f;
+  --mdprv-terminal-bar: #3c3836;
+  --mdprv-terminal-border: #504945;
+
+  --ifm-color-primary: #83a598;
+  --ifm-color-primary-dark: #739186;
+  --ifm-color-primary-darker: #69847a;
+  --ifm-color-primary-darkest: #566d64;
+  --ifm-color-primary-light: #92b0a4;
+  --ifm-color-primary-lighter: #a1bbb1;
+  --ifm-color-primary-lightest: #b7cbc3;
+  --ifm-color-primary-contrast-background: #373c3a;
+  --ifm-color-primary-contrast-foreground: #b7cbc3;
+
+  --ifm-color-secondary: #3c3836;
+  --ifm-color-secondary-dark: #2f2c2b;
+  --ifm-color-secondary-darker: #282625;
+  --ifm-color-secondary-darkest: #1d1b1a;
+  --ifm-color-secondary-light: #494543;
+  --ifm-color-secondary-lighter: #504b49;
+  --ifm-color-secondary-lightest: #5d5754;
+  --ifm-color-secondary-contrast-background: #3c3836;
+  --ifm-color-secondary-contrast-foreground: #ebdbb2;
+
+  --ifm-color-info: #83a598;
+  --ifm-color-info-dark: #739186;
+  --ifm-color-info-darker: #69847a;
+  --ifm-color-info-darkest: #566d64;
+  --ifm-color-info-light: #92b0a4;
+  --ifm-color-info-lighter: #a1bbb1;
+  --ifm-color-info-lightest: #b7cbc3;
+  --ifm-color-info-contrast-background: #373c3a;
+  --ifm-color-info-contrast-foreground: #a8c0b7;
+
+  --ifm-color-success: #b8bb26;
+  --ifm-color-success-dark: #a3a621;
+  --ifm-color-success-darker: #95981e;
+  --ifm-color-success-darkest: #7a7c18;
+  --ifm-color-success-light: #c4c738;
+  --ifm-color-success-lighter: #c9cc47;
+  --ifm-color-success-lightest: #d4d76b;
+  --ifm-color-success-contrast-background: #3f4028;
+  --ifm-color-success-contrast-foreground: #cdcf67;
+
+  --ifm-color-warning: #fabd2f;
+  --ifm-color-warning-dark: #f9b416;
+  --ifm-color-warning-darker: #f8af09;
+  --ifm-color-warning-darkest: #da9606;
+  --ifm-color-warning-light: #fbc648;
+  --ifm-color-warning-lighter: #fbca56;
+  --ifm-color-warning-lightest: #fcd77e;
+  --ifm-color-warning-contrast-background: #4a4029;
+  --ifm-color-warning-contrast-foreground: #fcd16d;
+
+  --ifm-color-danger: #fb4934;
+  --ifm-color-danger-dark: #fa3019;
+  --ifm-color-danger-darker: #f9240c;
+  --ifm-color-danger-darkest: #d51c05;
+  --ifm-color-danger-light: #fb624f;
+  --ifm-color-danger-lighter: #fc6f5d;
+  --ifm-color-danger-lightest: #fc9586;
+  --ifm-color-danger-contrast-background: #4a2d2a;
+  --ifm-color-danger-contrast-foreground: #fc8071;
+
+  --ifm-color-emphasis-0: #282828;
+  --ifm-color-emphasis-100: #32302f;
+  --ifm-color-emphasis-200: #3c3836;
+  --ifm-color-emphasis-300: #504945;
+  --ifm-color-emphasis-400: #665c54;
+  --ifm-color-emphasis-500: #928374;
+  --ifm-color-emphasis-600: #a89984;
+  --ifm-color-emphasis-700: #bdae93;
+  --ifm-color-emphasis-800: #d5c4a1;
+  --ifm-color-emphasis-900: #ebdbb2;
+  --ifm-color-emphasis-1000: #fbf1c7;
+
+  --ifm-background-color: var(--mdprv-bg);
+  --ifm-background-surface-color: var(--mdprv-surface);
+  --ifm-font-color-base: var(--mdprv-fg);
+  --ifm-font-color-secondary: var(--mdprv-muted);
+  --ifm-heading-color: var(--mdprv-fg-strong);
+  --ifm-color-content: var(--mdprv-fg);
+  --ifm-color-content-inverse: var(--mdprv-bg);
+  --ifm-color-content-secondary: var(--mdprv-muted);
+  --ifm-hover-overlay: rgba(235, 219, 178, 0.08);
+
+  --ifm-link-color: var(--mdprv-blue);
+  --ifm-link-hover-color: #b7cbc3;
+  --ifm-link-decoration: none;
+  --ifm-link-hover-decoration: none;
+
+  --ifm-navbar-background-color: rgba(40, 40, 40, 0.94);
+  --ifm-navbar-link-color: var(--mdprv-fg);
+  --ifm-navbar-link-hover-color: var(--mdprv-blue);
+  --ifm-navbar-link-active-color: var(--mdprv-blue);
+  --ifm-navbar-shadow: none;
+  --ifm-menu-color: var(--mdprv-muted);
+  --ifm-menu-color-active: var(--mdprv-blue);
+  --ifm-menu-color-background-active: rgba(131, 165, 152, 0.14);
+  --ifm-menu-color-background-hover: rgba(235, 219, 178, 0.08);
+  --ifm-toc-border-color: var(--mdprv-border-strong);
+  --ifm-toc-link-color: var(--mdprv-muted);
+  --ifm-breadcrumb-color-active: var(--mdprv-blue);
+  --ifm-breadcrumb-item-background-active: rgba(131, 165, 152, 0.14);
+
+  --ifm-table-border-color: var(--mdprv-border);
+  --ifm-table-head-background: var(--mdprv-surface-strong);
+  --ifm-table-head-color: var(--mdprv-fg-strong);
+  --ifm-table-cell-color: var(--mdprv-fg);
+  --ifm-table-stripe-background: rgba(235, 219, 178, 0.045);
+
+  --ifm-blockquote-color: var(--mdprv-muted);
+  --ifm-blockquote-border-color: var(--mdprv-yellow);
+
+  --ifm-code-background: var(--mdprv-surface-strong);
+  --ifm-pre-background: var(--mdprv-code-bg);
+  --docusaurus-highlighted-code-line-bg: rgba(131, 165, 152, 0.2);
+
+  --ifm-scrollbar-track-background-color: #32302f;
+  --ifm-scrollbar-thumb-background-color: #504945;
+  --ifm-scrollbar-thumb-hover-background-color: #665c54;
+}
+
+/* ---------------------------------------------------------------------------
+ * Base
+ * ------------------------------------------------------------------------ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: rgba(7, 102, 120, 0.22);
+  color: var(--mdprv-fg-strong);
+}
+
+[data-theme='dark'] ::selection {
+  background: rgba(131, 165, 152, 0.32);
+  color: var(--mdprv-fg-strong);
+}
+
+/* ---------------------------------------------------------------------------
+ * Botões
+ * ------------------------------------------------------------------------ */
+
+.button {
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* O Infima fixa `--ifm-color-gray-900` em botões secundários, o que some no
+ * modo escuro. Deixamos o texto seguir o tema. */
+.button.button--secondary:not(.button--outline) {
+  color: var(--mdprv-fg);
+}
+
+.button.button--secondary:not(.button--outline):hover,
+.button.button--secondary:not(.button--outline):active {
+  color: var(--mdprv-fg);
+}
+
+/* `button--outline` sem tipo herda a borda do fundo (some no Infima). */
+.button--outline {
+  --ifm-button-border-color: var(--ifm-color-primary);
+  --ifm-button-color: var(--ifm-color-primary);
+}
+
+.button--outline:hover,
+.button--outline:active {
+  --ifm-button-color: var(--ifm-color-content-inverse);
+}
+
+/* ---------------------------------------------------------------------------
+ * Navbar e navegação lateral
+ * ------------------------------------------------------------------------ */
+
+.navbar {
+  border-bottom: 1px solid var(--mdprv-border);
+}
+
+/* O blur cria containing block para o drawer fixo do menu mobile; aplicamos
+ * apenas no layout em que o drawer não existe. */
+@media (min-width: 997px) {
+  .navbar {
+    -webkit-backdrop-filter: saturate(140%) blur(12px);
+    backdrop-filter: saturate(140%) blur(12px);
+  }
+}
+
+/* O menu mobile usa a cor translúcida da navbar; aqui precisa ser opaco. */
+.navbar-sidebar {
+  background-color: var(--mdprv-bg);
+  border-right: 1px solid var(--mdprv-border);
+}
+
+.navbar-sidebar__brand {
+  border-bottom: 1px solid var(--mdprv-border);
+}
+
+.navbar__title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.navbar__logo {
+  border-radius: 7px;
+}
+
+.navbar__link {
+  border-radius: 6px;
+}
+
+.navbar__link--active {
+  font-weight: 600;
+}
+
+.dropdown__menu {
+  border: 1px solid var(--mdprv-border-strong);
+  border-radius: 8px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.menu__link {
+  border-radius: 6px;
+  line-height: 1.5;
+}
+
+.menu__link--active {
+  font-weight: 600;
+}
+
+.table-of-contents {
+  font-size: 0.84rem;
+}
+
+.table-of-contents__link {
+  line-height: 1.5;
+}
+
+.table-of-contents__link--active {
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+}
+
+/* Cabeçalhos com `código` viram texto normal no sumário, sem virar chip. */
+.table-of-contents code {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-size: 0.95em;
+}
+
+.pagination-nav__link {
+  border-color: var(--mdprv-border-strong);
+  border-radius: 10px;
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--ifm-color-primary);
+}
+
+.pagination-nav__sublabel {
+  color: var(--mdprv-muted);
+}
+
+.breadcrumbs__link {
+  border-radius: 6px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Conteúdo
+ * ------------------------------------------------------------------------ */
+
+.markdown h1:first-child {
+  letter-spacing: -0.02em;
+}
+
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  letter-spacing: -0.01em;
+}
+
+.markdown > p,
+.markdown li {
+  line-height: 1.75;
+}
+
+.markdown p a,
+.markdown li a,
+.markdown td a,
+.markdown th a {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.18em;
+}
+
+.markdown p a:hover,
+.markdown li a:hover,
+.markdown td a:hover,
+.markdown th a:hover {
+  text-decoration-thickness: 2px;
+}
+
+.markdown table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.925rem;
+}
+
+.markdown table th {
+  background: var(--ifm-table-head-background);
+  color: var(--ifm-table-head-color);
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.markdown table th,
+.markdown table td {
+  border: 1px solid var(--ifm-table-border-color);
+  padding: var(--ifm-table-cell-padding);
+  vertical-align: top;
+}
+
+.markdown table tr:nth-child(2n) {
+  background: var(--ifm-table-stripe-background);
+}
+
+.markdown blockquote {
+  padding: var(--ifm-blockquote-padding-vertical) var(--ifm-blockquote-padding-horizontal);
+  border-left: 4px solid var(--ifm-blockquote-border-color);
+  border-radius: 0 8px 8px 0;
+  background: var(--mdprv-surface);
+  color: var(--ifm-blockquote-color);
+}
+
+.markdown blockquote > :last-child {
+  margin-bottom: 0;
+}
+
+.markdown hr {
+  background-color: var(--mdprv-border-strong);
+  height: 1px;
+}
+
+.markdown figure {
+  margin: 2rem 0;
+}
+
+.markdown figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--mdprv-border-strong);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(60, 56, 54, 0.12);
+}
+
+[data-theme='dark'] .markdown figure img {
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+}
+
+.markdown figure figcaption {
+  margin-top: 0.65rem;
+  color: var(--mdprv-muted);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------------
+ * Admonitions (:::note / :::tip / :::warning / :::danger)
+ * ------------------------------------------------------------------------ */
+
+.alert {
+  border-left-width: var(--ifm-alert-border-left-width);
+  box-shadow: none;
+}
+
+/* Borda cheia (o Infima usa o tom `-dark` por padrão). */
+.theme-admonition-note,
+.theme-admonition-info {
+  --ifm-alert-border-color: var(--mdprv-blue);
+}
+
+.theme-admonition-tip,
+.theme-admonition-success {
+  --ifm-alert-border-color: var(--mdprv-aqua);
+}
+
+.theme-admonition-warning,
+.theme-admonition-caution {
+  --ifm-alert-border-color: var(--mdprv-orange);
+}
+
+.theme-admonition-danger {
+  --ifm-alert-border-color: var(--mdprv-red);
+}
+
+.alert [class*='admonitionHeading'] {
+  color: var(--ifm-alert-foreground-color);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.alert [class*='admonitionIcon'] svg {
+  fill: var(--ifm-alert-border-color);
+  stroke: var(--ifm-alert-border-color);
+}
+
+.alert a {
+  color: var(--ifm-alert-foreground-color);
+  text-decoration: underline;
+  text-decoration-color: var(--ifm-alert-border-color);
+}
+
+.alert a:hover {
+  text-decoration: none;
+}
+
+.alert code {
+  border-color: var(--ifm-alert-border-color);
+}
+
+/* ---------------------------------------------------------------------------
+ * Código
+ * ------------------------------------------------------------------------ */
+
+.markdown code {
+  padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
+  border: 1px solid var(--mdprv-code-border);
+  border-radius: var(--ifm-code-border-radius);
+  background: var(--ifm-code-background);
+  font-size: 0.875em;
+  overflow-wrap: break-word;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Blocos: o padding fica no <code>, que é quem rola dentro do <pre>. */
+.theme-code-block.theme-code-block {
+  border: 1px solid var(--mdprv-code-border);
+  border-radius: 10px;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.theme-code-block pre {
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  line-height: var(--ifm-pre-line-height);
+  font-size: 0.875rem;
+  border-radius: 0;
+}
+
+.theme-code-block pre code {
+  padding: 1.15rem 3.25rem 1.15rem 1.25rem;
+  border: 0;
+  background: transparent;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+/* Título opcional (```js title="..."```): não entra embaixo dos botões. */
+.theme-code-block [class*='codeBlockTitle'] {
+  padding: 0.6rem 1.25rem;
+  border-bottom: 1px solid var(--mdprv-border-strong);
+  background: var(--mdprv-surface-strong);
+  color: var(--mdprv-muted);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+[data-theme='dark'] .theme-code-block [class*='codeBlockTitle'] {
+  background: var(--mdprv-surface-strong);
+}
+
+.theme-code-block button.clean-btn {
+  border: 1px solid var(--mdprv-border-strong);
+  border-radius: 6px;
+  background: var(--mdprv-surface-strong);
+  color: var(--mdprv-muted);
+  padding: 0.4rem;
+  transition: color 120ms ease, border-color 120ms ease, background 120ms ease;
+}
+
+.theme-code-block button.clean-btn:hover,
+.theme-code-block button.clean-btn:focus-visible {
+  border-color: var(--ifm-color-primary);
+  color: var(--ifm-color-primary);
+  background: var(--mdprv-surface-strong);
+}
+
+.theme-code-block-highlighted-line {
+  background-color: var(--docusaurus-highlighted-code-line-bg);
+}
+
+/* Código inline dentro de títulos não deve estourar o ritmo vertical. */
+.markdown h1 code,
+.markdown h2 code,
+.markdown h3 code {
+  font-size: 0.82em;
+}
+
+/* ---------------------------------------------------------------------------
+ * Rodapé
+ * ------------------------------------------------------------------------ */
+
+.footer--dark {
+  --ifm-footer-background-color: #282828;
+  --ifm-footer-color: #d5c4a1;
+  --ifm-footer-link-color: #d5c4a1;
+  --ifm-footer-link-hover-color: #b8bb26;
+  --ifm-footer-title-color: #fbf1c7;
+  border-top: 1px solid #3c3836;
+}
+
+.footer__title {
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.footer__link-item {
+  font-size: 0.92rem;
+}
+
+.footer__copyright {
+  color: #a89984;
+  font-size: 0.85rem;
+}
+
+/* ---------------------------------------------------------------------------
+ * Blocos reutilizados no conteúdo Markdown
+ * ------------------------------------------------------------------------ */
+
+.lead {
+  font-size: 1.125rem;
+  color: var(--mdprv-muted);
+}
+
+.card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  margin: 1.5rem 0 2rem;
+}
+
+.card-grid > a {
+  display: block;
+  padding: 1.1rem 1.2rem;
+  border: 1px solid var(--mdprv-border-strong);
+  border-radius: 12px;
+  background: var(--mdprv-surface);
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 120ms ease, transform 120ms ease;
+}
+
+.card-grid > a:hover {
+  border-color: var(--ifm-color-primary);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.card-grid strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--ifm-color-primary);
+}
+
+.card-grid span {
+  color: var(--mdprv-muted);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------------
+ * Movimento reduzido
+ * ------------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .card-grid > a,
+  .theme-code-block button.clean-btn {
+    transition: none;
+  }
+}

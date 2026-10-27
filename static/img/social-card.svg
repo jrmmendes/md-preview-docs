@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="md-preview — documentação">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#282828"/>
+      <stop offset="1" stop-color="#32302f"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#83a598"/>
+      <stop offset="1" stop-color="#b8bb26"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="80" y="180" width="120" height="120" rx="26" fill="url(#mark)"/>
+  <path d="M104 276v-64h15.5l18.3 23.5L156 212h15v64h-16v-37l-17.2 22.6L120.6 239v37z" fill="#282828"/>
+  <path d="M196 212v43m0 0-11-11m11 11 11-11" fill="none" stroke="#3c3836" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="80" y="390" fill="#fbf1c7" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-size="86" font-weight="700">md-preview</text>
+  <text x="80" y="458" fill="#a89984" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif" font-size="34">Preview local de Markdown com temas, diagramas e live reload</text>
+  <text x="80" y="530" fill="#83a598" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="28">http://127.0.0.1:8766/&lt;slug&gt;</text>
+</svg>
