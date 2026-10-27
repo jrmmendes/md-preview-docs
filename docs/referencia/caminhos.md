@@ -1,132 +1,89 @@
 ---
-title: Caminhos de configuração
-sidebar_position: 5
-description: Onde ficam config.json, temas, estado do daemon, temporários e artefatos de build.
+title: Caminhos
+sidebar_position: 4
+description: Onde ficam configuração, temas, estado do daemon, temporários e o binário instalado.
 ---
 
-Todos os caminhos seguem XDG quando disponíveis e podem ser movidos com
-`MDPRV_*`. Nada é gravado no diretório do projeto, exceto o binário e o build.
+Os caminhos seguem XDG e podem ser movidos com `MDPRV_*`. Nada é gravado no
+diretório do projeto.
 
 ## Configuração
 
-| Caminho | Conteúdo | Criado por |
-| --- | --- | --- |
-| `${XDG_CONFIG_HOME:-~/.config}/md-preview/` | Raiz de configuração | `config init`, `theme seed` |
-| `config.json` | Preferências | `config init` |
-| `config.schema.json` | Schema para o editor | `config init` |
-| `themes/` | Temas de usuário | `theme seed` ou daemon |
-| `themes/<nome>.json` | Tema individual | Você ou `theme seed` |
-| `themes/theme.schema.json` | Schema do tema | `theme seed` ou daemon |
-
-`MDPRV_CONFIG_DIR` substitui a raiz inteira. Se definido, os demais caminhos são
-relativos a ele.
-
 ```text
-~/.config/md-preview/
-├── config.json
-├── config.schema.json
+${XDG_CONFIG_HOME:-~/.config}/md-preview/
+├── config.json            # opcional; criado por `config init`
+├── config.schema.json     # schema para o editor
 └── themes/
     ├── auto.json
-    ├── github-light.json
     ├── nord.json
     ├── theme.schema.json
-    └── meu-tema.json
+    └── meu-tema.json      # temas de usuário
 ```
 
-## Estado do daemon
+`MDPRV_CONFIG_DIR` substitui a raiz inteira. `theme path` imprime os caminhos
+efetivos.
+
+## Estado e temporários
 
 | Caminho | Conteúdo |
 | --- | --- |
-| `${XDG_STATE_HOME:-~/.local/state}/md-preview/daemon.json` | `{ pid, port, token }` |
+| `${XDG_STATE_HOME:-~/.local/state}/md-preview/daemon.json` | `{ pid, port, token }`, modo `0600` |
+| `${XDG_CACHE_HOME:-~/.cache}/md-preview/tmp/temp-<uuid>.md` | Documentos de `--pipe`, modo `0600` |
 
-O arquivo é gravado de forma atômica com permissão `0600` e removido no
-encerramento normal. `MDPRV_STATE` substitui o caminho completo.
+O estado é gravado de forma atômica e removido no encerramento normal. Os
+temporários não são apagados automaticamente.
 
-## Temporários
-
-| Caminho | Conteúdo |
-| --- | --- |
-| `${XDG_CACHE_HOME:-~/.cache}/md-preview/tmp/temp-<uuid>.md` | Documentos de `--pipe` |
-
-Cada pipe cria um arquivo novo com permissão `0600`. Eles não são removidos
-automaticamente. `MDPRV_TMP_DIR` substitui o diretório.
-
-## Artefatos do projeto
+## Instalação
 
 | Caminho | Papel |
 | --- | --- |
-| `bin/md-preview` | Binário único gerado pelo build |
-| `dist/client/` | Pacote do cliente no navegador gerado por `build:client` |
-| `themes/` (repositório) | Temas embutidos, compilados no binário |
-| `src/` | Código-fonte |
+| `~/.md-preview` | Clone da tag instalada |
+| `~/.md-preview/bin/md-preview` | Binário compilado |
+| `~/.local/bin/md-preview` | Symlink no `PATH` |
 
-O binário embute cliente, temas e Mermaid. `dist/client` não é necessário em
-tempo de execução; os temas embutidos também não precisam existir no disco.
+## Variáveis
 
-## Variáveis que mudam os caminhos
+| Variável | Padrão | Efeito |
+| --- | --- | --- |
+| `MDPRV_CONFIG_DIR` | `${XDG_CONFIG_HOME:-~/.config}/md-preview` | Raiz de configuração e temas |
+| `MDPRV_PORT` | `8766` | Porta do daemon |
+| `MDPRV_IDLE` | `15` | Minutos de inatividade |
+| `MDPRV_THEME` | `auto` | Tema padrão |
+| `MDPRV_LOADER` | `classic` | Loader de navegação |
+| `MDPRV_ZOOM_SENSITIVITY` | `1.1` | Passo do zoom do Mermaid |
+| `MDPRV_SEED_THEMES` | `1` | Copia embutidos ausentes no início |
+| `MDPRV_STATE` | `${XDG_STATE_HOME:-~/.local/state}/md-preview/daemon.json` | Arquivo de estado |
+| `MDPRV_TMP_DIR` | `${XDG_CACHE_HOME:-~/.cache}/md-preview/tmp` | Diretório do `--pipe` |
+| `XDG_CONFIG_HOME` | `~/.config` | Base de configuração |
+| `XDG_STATE_HOME` | `~/.local/state` | Base de estado |
+| `XDG_CACHE_HOME` | `~/.cache` | Base de cache |
 
-| Variável | Afeta |
-| --- | --- |
-| `MDPRV_CONFIG_DIR` | Configuração e temas |
-| `MDPRV_STATE` | Arquivo de estado completo |
-| `MDPRV_TMP_DIR` | Temporários do pipe |
-| `XDG_CONFIG_HOME` | Base de configuração |
-| `XDG_STATE_HOME` | Base de estado |
-| `XDG_CACHE_HOME` | Base de cache |
-
-## Caminhos legados
-
-Esta versão **não lê nem migra**:
-
-- `.md-preview` no projeto;
-- `~/.md-preview`;
-- `./.md-preview`;
-- temas no diretório atual.
-
-Nenhum arquivo legado é apagado ou sobrescrito. Se você usava uma versão
-anterior, mova os temas manualmente para
-`~/.config/md-preview/themes/<nome>.json` e converta para `schemaVersion: 1`.
-
-## Inspecionar
-
-```bash
-md-preview theme path
-```
+## Precedência
 
 ```text
-config: /home/ana/.config/md-preview
-themes: /home/ana/.config/md-preview/themes
+padrões  <  config.json  <  MDPRV_*
 ```
 
-```bash
-cat "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json"
-ls "${XDG_CACHE_HOME:-$HOME/.cache}/md-preview/tmp"
-```
+O tema tem uma camada extra por requisição:
+`?theme=` > cookie `mdprv_theme` > `config.json`/`MDPRV_THEME` > `auto`.
+
+`config.json` é opcional e nunca é criado implicitamente. JSON inválido é
+reportado e os padrões são usados; chaves desconhecidas são ignoradas com aviso.
 
 ## Limpeza
-
-:::warning[Backup de temas]
-Os comandos abaixo removem configurações e temas de usuário. Faça backup do que
-quiser manter antes de apagar o diretório de configuração.
-:::
 
 ```bash
 md-preview daemon stop
 rm -rf "${XDG_CONFIG_HOME:-$HOME/.config}/md-preview"
 rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview"
 rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/md-preview"
-rm -f "$HOME/.local/bin/md-preview"
+rm -rf ~/.md-preview
+rm -f ~/.local/bin/md-preview
 ```
 
-Para limpar apenas temporários:
+Faça backup dos temas de usuário antes de apagar a configuração. Para limpar só
+os temporários:
 
 ```bash
 rm -f "${XDG_CACHE_HOME:-$HOME/.cache}/md-preview/tmp/"temp-*.md
-```
-
-Para recomeçar sem perder temas, apague somente o estado e reinicie:
-
-```bash
-md-preview daemon stop
-rm -f "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json"
 ```

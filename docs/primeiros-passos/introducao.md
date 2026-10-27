@@ -1,92 +1,54 @@
 ---
 title: Introdução
 sidebar_position: 1
-description: O que é o md-preview, o problema que ele resolve, como funciona e por onde começar.
+description: O que é o md-preview, como um arquivo vira uma URL local e quais eventos mantêm a página atualizada.
 ---
 
-**md-preview** é uma CLI e um daemon local que renderizam Markdown no navegador.
-Você aponta para um arquivo, recebe uma URL em `127.0.0.1:8766` e continua
-editando: a cada salvamento, a página recarrega.
+**md-preview** é uma CLI que registra arquivos Markdown em um daemon local. O
+daemon renderiza o documento e serve uma URL em `127.0.0.1:8766`; ao salvar o
+arquivo, a página recarrega.
 
-Diferente de um servidor de documentação, ele exibe **um documento por vez** e
-não exige configuração de projeto. Diferente também de um visualizador de
-editor, oferece temas completos, realce de sintaxe, diagramas Mermaid, árvores
-de diretórios interativas e um painel de configurações.
+Sem `--open-browser`, a CLI só imprime uma URL por arquivo. Isso permite usá-la
+em scripts e editores. O navegador é aberto apenas quando a flag é passada.
 
-<figure>
-  <img src="/img/features/ui-overview.png" alt="Tela do md-preview com sumário à esquerda, documento ao centro e histórico Recent à direita" />
-  <figcaption>Layout de três colunas: sumário, documento ativo e documentos recentes.</figcaption>
-</figure>
-
-## O problema que ele resolve
-
-Escrever Markdown é simples; **conferir o resultado** costuma não ser. Editores
-mostram uma aproximação, geradores de site exigem build, e visualizadores
-genéricos ignoram particularidades como frontmatter, imagens relativas e blocos
-Mermaid.
-
-O md-preview ocupa o espaço entre o editor e o navegador:
-
-- lê o arquivo direto do disco, sem etapa de build;
-- resolve imagens relativas a partir do diretório do documento;
-- aplica o mesmo tema em código, diagramas e interface;
-- mantém o preview vivo enquanto você edita;
-- roda inteiramente na sua máquina.
+```bash
+md-preview docs/guia.md
+# http://127.0.0.1:8766/docs/guia
+```
 
 ## Como funciona
 
-1. A CLI valida os arquivos e calcula um **slug** a partir do caminho.
-2. Se necessário, inicia o **daemon** em segundo plano e registra o documento.
-3. O daemon renderiza o Markdown no servidor e serve a página em
-   `http://127.0.0.1:8766/<slug>`.
-4. Um único canal SSE (`/__events`) avisa o navegador sobre mudanças no disco,
-   novos documentos e temas.
+1. A CLI valida o arquivo e calcula um **slug** a partir do caminho.
+2. Se preciso, inicia o **daemon** em segundo plano e registra o documento.
+3. O daemon renderiza o Markdown e serve a página em `/<slug>`.
+4. Um canal SSE (`GET /__events`) avisa o navegador sobre mudanças.
 
-Sem `--open-browser`, a CLI só imprime uma URL por arquivo. Esse é o
-comportamento padrão e o que permite integrar o md-preview a scripts e editores.
+O slug é relativo à raiz do repositório Git que contém o arquivo. Sem Git, a
+raiz é `$HOME` — ou `/`, para caminhos fora dele. A extensão é removida e
+espaços ou caracteres fora de `A-Z a-z 0-9 / . _ -` viram `-`.
 
-## O que está incluído
-
-| Área | Recursos |
+| Arquivo | Slug |
 | --- | --- |
-| Entrada | Arquivos `.md`, `.markdown`, `.mdc`; múltiplos arquivos; stdin com `--pipe`; registro via `register` |
-| Markdown | GFM, tabelas, listas de tarefas, notas de rodapé, HTML inline, linkify, typographer, âncoras |
-| Código | Shiki com 9 linguagens e saída dupla clara/escura |
-| Diagramas | Mermaid renderizado no navegador, lightbox com zoom e arrastar |
-| Estrutura | Tree fences interativas, frontmatter, imagens relativas |
-| Temas | 9 embutidos, temas de usuário em JSON, `auto` por `prefers-color-scheme` |
-| Interface | TOC, Recent, fontes, seis loaders, modo zen, largura ajustável |
-| Operação | Daemon com início automático, inatividade de 15 min, arquivo de estado `0600` e token |
+| `~/notas/ideia.md` | `notas/ideia` |
+| `docs/guia.md` (dentro de um repositório Git) | `docs/guia` |
+| `/etc/exemplo.md` | `etc/exemplo` |
 
-:::tip[Primeiro contato]
-Se você só quer ver funcionando, siga o [Início rápido](/primeiros-passos/inicio-rapido).
-Para entender o modelo mental antes de usar, leia [Conceitos](/primeiros-passos/conceitos).
-:::
+`register --slug` permite escolher o slug manualmente. Documentos de `--pipe`
+usam o nome do temporário: `temp-<uuid>.md`.
 
-## O que ele não é
+## Eventos
 
-O md-preview não é um gerador de site, não faz busca de texto completo entre
-documentos e não exporta PDF ou HTML. Não há rota raiz: `/` responde `404`,
-porque não existe "documento inicial". A lista completa está em
-[Limitações](/limitacoes).
+| Evento | Quando ocorre | Efeito na página |
+| --- | --- | --- |
+| `snapshot` | Ao conectar | Envia versões e a lista de slugs |
+| `version` | Conteúdo muda no disco | Recarrega a página atual |
+| `slugs` | Documento é registrado | Atualiza o Recent |
+| `themes` | Tema de usuário muda | Recarrega se o tema atual foi afetado |
+| `ping` | A cada 20 segundos | Mantém a conexão viva |
 
-## Comece por aqui
+O mesmo canal alimenta o live reload, o histórico Recent e a troca de temas. Não
+há polling do documento.
 
-<div className="card-grid">
-  <a href="/primeiros-passos/instalacao">
-    <strong>Instalação</strong>
-    <span>Compile o binário com Bun e coloque no PATH.</span>
-  </a>
-  <a href="/primeiros-passos/inicio-rapido">
-    <strong>Início rápido</strong>
-    <span>Do arquivo vazio ao preview com live reload em cinco minutos.</span>
-  </a>
-  <a href="/guias/markdown">
-    <strong>Markdown suportado</strong>
-    <span>O que renderiza, o que não renderiza e como usar cada extensão.</span>
-  </a>
-  <a href="/referencia/cli">
-    <strong>Referência da CLI</strong>
-    <span>Todos os comandos, opções e códigos de saída.</span>
-  </a>
-</div>
+Continue em [Instalação](/primeiros-passos/instalacao), [Início
+rápido](/primeiros-passos/inicio-rapido) ou [Referência da
+CLI](/referencia/cli).

@@ -1,92 +1,61 @@
 ---
-title: Perguntas frequentes
-sidebar_position: 21
-description: Respostas curtas sobre instalação, daemon, temas, Mermaid, imagens, histórico e exportação.
+title: FAQ
+sidebar_position: 5
+description: Respostas curtas e a lista do que o md-preview não faz.
 ---
 
-## O md-preview está publicado no npm?
+## Está publicado no npm?
 
-O `package.json` do projeto é `private: true`. A instalação normal é pelo
-código-fonte, com `bun install` e `bun run build`, gerando `bin/md-preview`.
-Veja [Instalação](/primeiros-passos/instalacao).
+Não. O `package.json` é `private: true`. A instalação é por clone e build, como
+na [Instalação](/primeiros-passos/instalacao).
 
 ## Preciso de Node.js?
 
-Não em tempo de execução: o binário é gerado pelo Bun. O Node pode existir na
-máquina, mas o md-preview não depende dele para rodar.
+Não em tempo de execução: o binário é gerado pelo Bun e não depende do Node.
 
 ## Preciso de um repositório Git?
 
-Não. Sem Git, a raiz do slug passa a ser `$HOME` (ou `/`, para caminhos fora de
-`$HOME`).
+Não. Sem Git, o slug é relativo a `$HOME` (ou `/`).
 
 ## Posso abrir mais de um documento?
 
-Sim, registre vários. Cada um tem sua URL. A interface mostra **um por vez**, e o
-Recent permite alternar. Não há abas internas.
+Sim, registre vários em uma chamada. Cada um tem sua URL; a interface mostra um
+por vez e o Recent alterna entre eles.
 
 ## Por que `/` retorna 404?
 
-Porque não existe documento raiz. O md-preview não gera índice nem escolhe um
-arquivo padrão. Abra a URL de um slug registrado.
+Porque não existe documento raiz nem índice automático. Abra a URL de um slug
+registrado.
 
 ## Por que meu arquivo com acento virou `-`?
 
-O slug mantém apenas `A-Z a-z 0-9 / . _ -`. Espaços e acentos são substituídos
-por `-`. Use `register --slug` para escolher um slug manualmente.
+O slug mantém apenas `A-Z a-z 0-9 / . _ -`. Use `register --slug` para escolher
+um slug manualmente.
 
 ## Onde ficam configuração e temas?
 
-Em `${XDG_CONFIG_HOME:-~/.config}/md-preview/`. O comando `md-preview theme path`
-imprime os caminhos exatos. Veja
-[Caminhos de configuração](/referencia/caminhos).
+Em `${XDG_CONFIG_HOME:-~/.config}/md-preview/`. `md-preview theme path` imprime
+os caminhos. Veja [Caminhos](/referencia/caminhos).
 
 ## Como defino uma porta fixa?
 
-```bash
-MDPRV_PORT=9000 md-preview doc.md
-```
-
-Ou defina `"port": 9000` no `config.json`. A variável de ambiente vence o
-arquivo.
+`MDPRV_PORT=9000 md-preview doc.md` ou `"port": 9000` no `config.json`. A
+variável vence o arquivo.
 
 ## O daemon fica rodando para sempre?
 
-Não. Ele encerra após 15 minutos ociosos por padrão. `MDPRV_IDLE` muda o limite,
-e `md-preview daemon stop` encerra imediatamente.
+Não. Ele encerra após 15 minutos ociosos. `MDPRV_IDLE` muda o limite e
+`md-preview daemon stop` encerra agora.
 
 ## Por que o navegador não abriu?
 
-Sem `--open-browser`, a CLI só imprime a URL. Esse é o comportamento padrão. Se
-`--open-browser` falhar, o sistema não tem `xdg-open`, `open` ou
-`explorer.exe` disponível.
-
-## O tema mudou, mas o código continua com as cores antigas
-
-Recarregue a página. A troca de tema via painel já recarrega; editar um
-`theme.json` dispara o evento e recarrega a aba quando o tema atual é afetado.
-Se não recarregar, valide o arquivo com `theme validate`.
-
-## Posso usar um tema só para um documento?
-
-Sim, com `?theme=` na URL ou `--theme` na CLI. O cookie é global para o
-navegador; a query vence o cookie. A precedência está em
-[Temas embutidos](/guias/temas-embutidos).
-
-## Mermaid funciona offline?
-
-Sim. A biblioteca é servida localmente em `/__assets/mermaid.min.js`. Não há CDN.
-Mas o JavaScript precisa estar habilitado no navegador.
-
-## Posso usar Mermaid sem JavaScript?
-
-Não. O diagrama é renderizado no cliente.
+Sem `--open-browser`, a CLI só imprime a URL. Se a flag falhar, o sistema não
+tem `xdg-open`, `open` ou `explorer.exe`; copie a URL manualmente.
 
 ## Como faço um PDF?
 
-O md-preview não exporta PDF nem HTML. Use a impressão do navegador se precisar
-de um PDF ocasional, ciente de que não é um recurso suportado. Para exportação
-real, use uma ferramenta dedicada.
+O md-preview não exporta PDF nem HTML. A impressão do navegador gera um PDF
+ocasional, mas não é um formato suportado.
 
 ## Há busca entre documentos?
 
@@ -95,49 +64,38 @@ registrados, sem índice de conteúdo.
 
 ## O Recent é mantido entre reinícios?
 
-Não. Ele vive em memória no daemon e some ao reiniciar. Os arquivos continuam no
-disco; basta registrá-los de novo.
+Não. Ele vive em memória no daemon. Os arquivos continuam no disco; basta
+registrá-los de novo.
 
 ## Posso usar imagens fora do diretório do documento?
 
 Para caminhos relativos, não. O daemon só serve imagens dentro do diretório do
-documento registrado e bloqueia travessia de diretórios e symlinks externos. URLs
-absolutas são carregadas diretamente pelo navegador, se a CSP permitir.
+documento registrado. URLs absolutas são carregadas pelo navegador.
 
 ## `--pipe` e arquivos podem ser combinados?
 
-Não. `--pipe` lê stdin e não aceita arquivos posicionais na mesma invocação.
-
-## O que acontece se eu editar o arquivo temporário do pipe?
-
-O preview recarrega, porque o temporário é observado como qualquer documento.
-Editar o arquivo original que gerou o pipe **não** afeta o preview.
-
-## Posso registrar conteúdo sem gravar em disco?
-
-Sim, com `register --stdin`. Sem `--path`, não há live reload nem imagens
-relativas.
+Não. `--pipe` lê stdin e recusa arquivos posicionais na mesma invocação.
 
 ## O md-preview altera meus arquivos?
 
-Não. Ele lê os documentos e grava só o estado, os temporários do `--pipe` e, na
-primeira inicialização do daemon, os temas embutidos ausentes (quando
-`seedThemes` está ativo). O binário e `dist/client` são artefatos de build.
+Não. Ele lê os documentos e grava só estado, temporários do `--pipe` e, na
+primeira inicialização, os temas embutidos ausentes (se `seedThemes` estiver
+ativo).
 
-## Como desinstalar?
+## O que o md-preview não faz
 
-```bash
-md-preview daemon stop
-rm -f "$HOME/.local/bin/md-preview"
-rm -rf "${XDG_CONFIG_HOME:-$HOME/.config}/md-preview"
-rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview"
-rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/md-preview"
-```
+| Ausência | Impacto |
+| --- | --- |
+| Busca de texto completo | Encontrar conteúdo é manual |
+| Exportação para PDF ou HTML | Compartilhar exige outra ferramenta |
+| Admonitions (`:::note`), KaTeX e emoji | Markdown mais simples |
+| Mermaid sem JavaScript | Diagramas aparecem como texto |
+| Realce fora de nove linguagens | Outros fences ficam sem cor |
+| Rota raiz | Toda visita precisa de um slug |
+| Histórico persistente | Recent some ao reiniciar |
+| Abas internas | Um documento por URL |
+| Imagens fora do diretório | Sem recursos compartilhados |
+| Acesso remoto, TLS e colaboração | Uso restrito à mesma máquina |
+| Interface traduzida | Rótulos fixos, majoritariamente em inglês |
 
-Faça backup dos temas de usuário antes de remover a configuração.
-
-## Onde reporto um bug?
-
-No repositório do projeto. Inclua a versão (`md-preview --version`), o sistema,
-o comando executado e a saída de `md-preview daemon status`. Para falhas visuais,
-informe o tema e se o problema ocorre em claro e escuro.
+Não exponha a porta `8766`: o daemon foi feito para loopback.

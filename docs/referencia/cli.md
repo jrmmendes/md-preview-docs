@@ -1,18 +1,16 @@
 ---
 title: CLI
 sidebar_position: 1
-description: Referência completa de md-preview, daemon, theme, config e register, com opções e códigos de saída.
+description: Comandos, opções, saídas e códigos de saída do md-preview.
 ---
-
-## Sinopse
 
 ```text
 md-preview [options] [files...]
 md-preview [command]
 ```
 
-A forma raiz registra arquivos. Os subcomandos gerenciam o daemon, os temas, a
-configuração e o registro via stdin.
+A forma raiz registra arquivos. Os subcomandos gerenciam daemon, temas,
+configuração e registro via stdin.
 
 ```text
 Usage: md-preview [options] [command] [files...]
@@ -28,39 +26,21 @@ Options:
   -h, --help          display help for command
 ```
 
-## Opções da forma raiz
+## Forma raiz
 
-| Opção | Efeito | Padrão |
-| --- | --- | --- |
-| `files...` | Um ou mais arquivos `.md`, `.markdown`, `.mdc` | — |
-| `--theme <name>` | Valida o tema e adiciona `?theme=<name>` a todas as URLs | Configuração |
-| `--open-browser` | Abre o navegador uma vez, no primeiro arquivo | Desligado |
-| `--pipe` | Lê Markdown de stdin e registra um arquivo temporário | Desligado |
-| `-V`, `--version` | Imprime a versão e encerra | — |
-| `-h`, `--help` | Imprime a ajuda | — |
+| Opção | Efeito |
+| --- | --- |
+| `files...` | Um ou mais `.md`, `.markdown` ou `.mdc` |
+| `--theme <name>` | Valida o tema e adiciona `?theme=<name>` às URLs |
+| `--open-browser` | Abre o navegador uma vez, no primeiro arquivo |
+| `--pipe` | Lê stdin e registra um temporário |
 
-### Múltiplos arquivos
+Sem `--open-browser`, imprime uma URL por arquivo e não abre nada. Com vários
+arquivos, deduplica pelo caminho real e abre só o primeiro.
 
-```bash
-md-preview a.md b.markdown c.mdc
-```
-
-- deduplica por caminho real (symlinks incluídos);
-- imprime uma URL por arquivo, na ordem dos argumentos;
-- abre o navegador no primeiro arquivo só com `--open-browser`;
-- `--theme` se aplica a todos.
-
-### `--pipe`
-
-```bash
-echo '# Olá' | md-preview --pipe
-```
-
-- não pode ser combinado com arquivos posicionais;
-- rejeita TTY e stdin vazio;
-- grava em `${XDG_CACHE_HOME:-~/.cache}/md-preview/tmp/temp-<uuid>.md`;
-- registra o arquivo, portanto o live reload funciona;
-- imprime a URL com o nome do temporário como slug.
+`--pipe` não aceita arquivos posicionais, rejeita TTY e stdin vazio, e grava em
+`${XDG_CACHE_HOME:-~/.cache}/md-preview/tmp/temp-<uuid>.md`. O temporário é
+observado, então o live reload funciona.
 
 ## Subcomandos
 
@@ -68,22 +48,15 @@ echo '# Olá' | md-preview --pipe
 | --- | --- |
 | `daemon start` | Inicia o daemon se ainda não estiver rodando |
 | `daemon stop` | Encerra o daemon e limpa o estado |
-| `daemon status` | Mostra o status; código de saída `1` quando parado |
-| `theme list` | Lista temas e origem (`builtin`/`user`) |
-| `theme list --json` | Lista em JSON |
+| `daemon status` | Status; código `1` quando parado |
+| `theme list [--json]` | Lista temas e origem (`builtin`/`user`) |
 | `theme validate <file>` | Valida um `theme.json` |
 | `theme path` | Imprime os diretórios de config e temas |
 | `theme seed` | Cria temas embutidos ausentes |
 | `config init` | Cria `config.json` sem sobrescrever |
 | `register` | Registra Markdown de stdin |
 
-## `daemon`
-
-```bash
-md-preview daemon start
-md-preview daemon stop
-md-preview daemon status
-```
+### `daemon`
 
 | Comando | Saída típica | Código |
 | --- | --- | --- |
@@ -95,8 +68,7 @@ md-preview daemon status
 | `status` (ativo) | `md-preview daemon running (pid 48211, port 8766)` | `0` |
 | `status` (parado) | `md-preview daemon stopped` | `1` |
 
-O código de saída `1` de `status` é intencional e permite usar o comando em
-scripts:
+O código `1` de `status` é intencional:
 
 ```bash
 if ! md-preview daemon status >/dev/null 2>&1; then
@@ -104,89 +76,30 @@ if ! md-preview daemon status >/dev/null 2>&1; then
 fi
 ```
 
-## `theme`
-
-### `theme list`
+### `theme`
 
 ```bash
-md-preview theme list
-```
-
-```text
-auto	builtin
-dracula	builtin
-github-dark	builtin
-github-light	builtin
-gruvbox-dark	builtin
-gruvbox-light	builtin
-nord	builtin
-solarized-dark	builtin
-solarized-light	builtin
-```
-
-```bash
-md-preview theme list --json
-```
-
-```json
-[
-  { "name": "auto", "source": "builtin" },
-  { "name": "nord", "source": "user" }
-]
+md-preview theme list           # nome e origem, um por linha
+md-preview theme list --json    # [{ "name": "auto", "source": "builtin" }]
+md-preview theme validate FILE  # ok: <arquivo> ou erro, código 1
+md-preview theme path           # config: ... / themes: ...
+md-preview theme seed           # created: N / skipped: N
 ```
 
 Erros de validação de temas de usuário vão para stderr.
 
-### `theme validate`
+### `config init`
 
-```bash
-md-preview theme validate ~/.config/md-preview/themes/meu-tema.json
-```
+Cria `config.json` com os padrões e `config.schema.json`, sem sobrescrever um
+arquivo existente. A saída é `created <path>` ou `already exists: <path>`.
 
-| Resultado | Saída | Código |
-| --- | --- | --- |
-| Válido | `ok: <arquivo>` | `0` |
-| JSON inválido | mensagem do parser | `1` |
-| Contrato inválido | campo/regra violada | `1` |
-
-### `theme path`
-
-```text
-config: /home/ana/.config/md-preview
-themes: /home/ana/.config/md-preview/themes
-```
-
-### `theme seed`
-
-Cria o diretório de temas e copia os embutidos ausentes:
-
-```text
-created: 9
-skipped: 0
-```
-
-Arquivos existentes nunca são sobrescritos.
-
-## `config init`
-
-```bash
-md-preview config init
-```
-
-| Situação | Saída |
-| --- | --- |
-| Não existia | `created /home/ana/.config/md-preview/config.json` |
-| Já existia | `already exists: /home/ana/.config/md-preview/config.json` |
-
-Também grava `config.schema.json` para autocomplete no editor.
-
-## `register`
+### `register`
 
 ```text
 Usage: md-preview register [options]
 
 Options:
-  --slug <slug>   slug used in the preview URL
+  --slug <slug>   slug used in the preview URL (required)
   --path <file>   document path (enables live reload and relative images)
   --stdin         read the Markdown content from stdin (required)
   -h, --help      display help for command
@@ -199,8 +112,8 @@ cat doc.md | md-preview register --stdin --slug docs/doc --path doc.md
 | Regra | Comportamento |
 | --- | --- |
 | `--stdin` ausente | Erro, código `1` |
+| `--slug` ausente ou vazio | Erro, código `1` |
 | stdin é TTY | Erro, código `1` |
-| `--slug` vazio | Erro, código `1` |
 | Sucesso | Imprime **somente** o slug em stdout |
 | Navegador | Nunca abre |
 
@@ -213,34 +126,7 @@ cat doc.md | md-preview register --stdin --slug docs/doc --path doc.md
 
 Mensagens de erro vão para stderr, prefixadas com `md-preview:`.
 
-## Exemplos
-
-```bash
-# registrar e imprimir URLs
-md-preview docs/a.md docs/b.md
-
-# abrir no primeiro arquivo
-md-preview docs/a.md --open-browser
-
-# tema pontual
-md-preview docs/a.md --theme solarized-dark
-
-# conteúdo de stdin
-git diff | md-preview --pipe
-
-# slug controlado
-cat nota.md | md-preview register --stdin --slug notas/hoje --path nota.md
-
-# inspecionar temas
-md-preview theme list --json
-
-# parar tudo
-md-preview daemon stop
-```
-
 :::note[Comando interno]
-O subcomando `__serve` existe apenas para o processo do daemon se reexecutar. Ele
-não aparece na ajuda e não deve ser chamado manualmente.
+`__serve` existe só para o processo do daemon se reexecutar. Não aparece na ajuda
+e não deve ser chamado manualmente.
 :::
-
-Para o comportamento do servidor, veja [Daemon e endpoints](/referencia/daemon).

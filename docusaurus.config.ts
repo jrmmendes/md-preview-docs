@@ -5,7 +5,7 @@ import {gruvboxDark, gruvboxLight} from './src/prism/gruvbox';
 
 const config: Config = {
   title: 'md-preview',
-  tagline: 'Visualize Markdown localmente, com live reload, temas e diagramas',
+  tagline: 'Markdown local no navegador, com live reload e temas',
   favicon: 'img/favicon.svg',
 
   // Site local/projeto: a URL canônica não é usada para servir o conteúdo.
@@ -53,9 +53,9 @@ const config: Config = {
       {
         name: 'description',
         content:
-          'Documentação do md-preview: CLI e daemon local para renderizar Markdown com temas, Shiki, Mermaid, tree fences e live reload.',
+          'Documentação do md-preview: CLI e daemon local para renderizar Markdown com temas, live reload e diagramas.',
       },
-      {name: 'keywords', content: 'markdown, preview, cli, bun, daemon, shiki, mermaid'},
+      {name: 'keywords', content: 'markdown, preview, cli, bun'},
     ],
     colorMode: {
       defaultMode: 'light',
@@ -78,11 +78,10 @@ const config: Config = {
           position: 'left',
           label: 'Primeiros passos',
         },
-        {to: '/guias/markdown', label: 'Guias', position: 'left'},
-        {to: '/receitas/multiplos-arquivos', label: 'Receitas', position: 'left'},
+        {to: '/recursos/markdown', label: 'Recursos', position: 'left'},
+        {to: '/receitas/pipe-e-stdin', label: 'Receitas', position: 'left'},
         {to: '/referencia/cli', label: 'Referência', position: 'left'},
-        {to: '/faq', label: 'Perguntas frequentes', position: 'left'},
-        {to: '/limitacoes', label: 'Limitações', position: 'right'},
+        {to: '/faq', label: 'FAQ', position: 'left'},
       ],
     },
     footer: {
@@ -97,23 +96,16 @@ const config: Config = {
           ],
         },
         {
-          title: 'Aprenda',
-          items: [
-            {label: 'Markdown suportado', to: '/guias/markdown'},
-            {label: 'Temas', to: '/guias/temas-embutidos'},
-            {label: 'Interface e atalhos', to: '/guias/interface'},
-          ],
-        },
-        {
           title: 'Referência',
           items: [
             {label: 'CLI', to: '/referencia/cli'},
             {label: 'theme.json', to: '/referencia/theme-json'},
-            {label: 'Daemon e endpoints', to: '/referencia/daemon'},
+            {label: 'Daemon', to: '/referencia/daemon'},
+            {label: 'Caminhos', to: '/referencia/caminhos'},
           ],
         },
       ],
-      copyright: `Documentação do md-preview — construída com Docusaurus.`,
+      copyright: `md-preview — documentação`,
     },
     prism: {
       theme: gruvboxLight,

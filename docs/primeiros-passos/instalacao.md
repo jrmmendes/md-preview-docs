@@ -1,86 +1,42 @@
 ---
 title: Instalação
 sidebar_position: 2
-description: Requisitos, build a partir do código-fonte, instalação do binário no PATH e verificação.
+description: Clone da tag mais recente, build com Bun e instalação do binário em ~/.local/bin.
 ---
 
-O md-preview é distribuído como um único binário gerado pelo Bun. Não depende do
-Node.js em tempo de execução, e o binário embute o cliente do navegador, os temas
-embutidos e o Mermaid.
+import InstallCommand, {
+  MD_PREVIEW_TAG,
+  MD_PREVIEW_VERSION,
+} from '@site/src/components/InstallCommand';
 
-<figure>
-  <img src="/img/features/cli-terminal.png" alt="Terminal executando md-preview e imprimindo a URL do documento" />
-  <figcaption>A CLI imprime uma URL por arquivo e não abre o navegador sem --open-browser.</figcaption>
-</figure>
+O md-preview não é publicado no npm. A instalação clona a tag mais recente,
+compila o binário com Bun e cria um symlink em `~/.local/bin`.
 
 ## Requisitos
 
 | Requisito | Versão | Observação |
 | --- | --- | --- |
-| Bun | 1.x | O repositório declara `bun@1.4.3` em `packageManager` |
-| Sistema | Linux, macOS ou Windows | Abrir o navegador usa `xdg-open`, `open` ou `explorer.exe` |
-| Navegador | Chromium, Firefox ou Safari recente | Necessário para interface, Mermaid e cópia de código |
-| `git` | Opcional | Usado para calcular o slug relativo à raiz do repositório |
-| `fc-list` | Opcional | Sem ele, o seletor de fontes mostra apenas as famílias genéricas |
-
-Confira a versão do Bun:
+| Bun | 1.x | O repositório fixa `bun@1.4.3` em `packageManager` |
+| Git | qualquer | Usado no clone e no cálculo do slug |
+| Navegador | atual | Necessário para a interface e o Mermaid |
 
 ```bash
 bun --version
 ```
 
-## Compilar a partir do código-fonte
+## Instalação
 
-No diretório do repositório já clonado:
+<InstallCommand />
 
-```bash
-bun install
-bun run build
-```
+O comando clona a tag <code>{MD_PREVIEW_TAG}</code> em `~/.md-preview`, instala
+as dependências com lockfile, compila `bin/md-preview` e cria o link em
+`~/.local/bin`. O `cd` roda em subshell, então o diretório atual do seu terminal
+não muda.
 
-O script `build` compila primeiro o cliente do navegador e depois gera o binário
-em `bin/md-preview`. O binário resultante é autocontido: `dist/client` não é
-necessário para executar o binário.
+O clone falha se `~/.md-preview` já existir e não estiver vazio. Nesse caso,
+remova o diretório ou escolha outro caminho.
 
-```bash
-./bin/md-preview --version
-```
-
-Saída esperada (a versão acompanha o `package.json`):
-
-```text
-1.3.0
-```
-
-:::note[Compilação parcial]
-`bun run build:client` gera só o pacote do cliente no navegador em `dist/client`,
-útil durante o desenvolvimento da interface. Para uso normal, prefira
-`bun run build`.
-:::
-
-## Desenvolvimento
-
-O projeto usa Bun 1.4.3 como gerenciador e runtime. Os comandos de verificação:
-
-```bash
-bun run typecheck   # tsconfig.json (servidor) + tsconfig.ui.json (cliente)
-bun test            # testes unitários e de integração
-bun run build       # cliente + binário único
-```
-
-Para iterar só no cliente do navegador, `bun run build:client` gera
-`dist/client` sem recompilar o binário.
-
-## Adicionar ao PATH
-
-Para chamar `md-preview` de qualquer diretório, crie um link simbólico em um
-diretório que já esteja no seu `PATH`:
-
-```bash
-mkdir -p ~/.local/bin
-ln -sf "$PWD/bin/md-preview" ~/.local/bin/md-preview
-md-preview --version
-```
+## PATH
 
 Se `~/.local/bin` não estiver no `PATH`, adicione ao seu shell:
 
@@ -88,64 +44,46 @@ Se `~/.local/bin` não estiver no `PATH`, adicione ao seu shell:
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-Alternativa sem instalar: use o caminho completo `./bin/md-preview` ou um alias.
+Alternativa: `cd ~/.md-preview && bun link` cria o comando em `~/.bun/bin`
+(que também precisa estar no `PATH`).
 
-## Verificar a instalação
+## Verificar
 
-```bash
-md-preview daemon status
-```
-
-Com o daemon parado, o comando imprime `md-preview daemon stopped` e termina com
-código `1`. Isso é esperado: o daemon sobe automaticamente no primeiro preview.
+A versão esperada é <code>{MD_PREVIEW_VERSION}</code> — a mesma constante que
+monta o comando de instalação acima.
 
 ```bash
-md-preview theme list
-md-preview theme path
+md-preview --version    # deve imprimir a versão instalada
+md-preview theme list   # nome e origem; após o daemon semear, os nove temas aparecem como user
 ```
 
-`theme list` mostra `auto`, `dracula`, `github-dark`, `github-light`,
-`gruvbox-dark`, `gruvbox-light`, `nord`, `solarized-dark` e `solarized-light`,
-todos com origem `builtin` antes de qualquer personalização.
-
-## Configuração inicial (opcional)
-
-O md-preview funciona sem arquivo de configuração. Quando quiser fixar tema,
-porta ou loader:
-
-```bash
-md-preview config init
-md-preview theme seed
-```
-
-- `config init` cria `config.json` com os padrões e o schema do editor, **sem
-  sobrescrever** um arquivo existente.
-- `theme seed` cria o diretório de temas e copia os embutidos que ainda não
-  existem, também sem sobrescrever.
-
-Os caminhos exatos estão em [Caminhos de configuração](/referencia/caminhos).
+Na primeira execução o daemon copia os nove temas embutidos para
+`~/.config/md-preview/themes/`, então `theme list` passa a mostrar origem
+`user`. Editar esses arquivos sobrescreve o tema embutido de mesmo nome.
 
 ## Atualizar
 
-Depois de atualizar o código-fonte:
+Troque `vX.Y.Z` pela tag desejada nas duas primeiras linhas:
 
 ```bash
-bun install
-bun run build
+git -C ~/.md-preview fetch --depth 1 origin tag vX.Y.Z
+git -C ~/.md-preview checkout --detach vX.Y.Z
+(cd ~/.md-preview && bun install --frozen-lockfile && bun run build)
 md-preview daemon stop
 ```
 
-Reinicie o daemon para que ele carregue o novo binário. Documentos já
-registrados são mantidos apenas em memória; a próxima invocação os registra de
-novo.
+O `daemon stop` é obrigatório. Um daemon em execução continua servindo o binário
+antigo até ser encerrado; a próxima invocação inicia o processo novo.
 
-## Problemas comuns
+## Desinstalar
 
-| Sintoma | Causa provável | Solução |
-| --- | --- | --- |
-| `command not found` | `~/.local/bin` fora do `PATH` | Use o caminho completo ou ajuste o `PATH` |
-| `unsupported file extension` | Arquivo não é `.md`, `.markdown` ou `.mdc` | Renomeie ou converta |
-| `could not open a browser` | Nenhum utilitário para abrir o navegador | Abra a URL impressa manualmente |
-| Porta ocupada | Outro processo em `8766` | Veja [Solução de problemas](/receitas/troubleshooting) |
+```bash
+md-preview daemon stop
+rm -rf ~/.md-preview
+rm -f ~/.local/bin/md-preview
+```
+
+Configuração, temas de usuário, estado e temporários ficam no disco. Os caminhos
+e a limpeza completa estão em [Caminhos](/referencia/caminhos).
 
 Próximo passo: [Início rápido](/primeiros-passos/inicio-rapido).
