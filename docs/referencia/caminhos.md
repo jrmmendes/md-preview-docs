@@ -37,9 +37,9 @@ temporários não são apagados automaticamente.
 
 | Caminho | Papel |
 | --- | --- |
-| `~/.md-preview` | Clone da tag instalada |
-| `~/.md-preview/bin/md-preview` | Binário compilado |
-| `~/.local/bin/md-preview` | Symlink no `PATH` |
+| `~/.local/bin/md-preview` | Binário baixado da release ou link para o build local |
+| `~/.md-preview` | Clone do código-fonte, só quando você compila |
+| `~/.md-preview/bin/md-preview` | Binário gerado por `bun run build` |
 
 ## Variáveis
 
@@ -77,7 +77,7 @@ md-preview daemon stop
 rm -rf "${XDG_CONFIG_HOME:-$HOME/.config}/md-preview"
 rm -rf "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview"
 rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}/md-preview"
-rm -rf ~/.md-preview
+rm -rf ~/.md-preview          # só se você compilou do código-fonte
 rm -f ~/.local/bin/md-preview
 ```
 

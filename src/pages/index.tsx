@@ -44,14 +44,15 @@ export default function Home() {
             reload, temas e diagramas Mermaid.
           </p>
           <p className={styles.note}>
-            Requer Bun 1.x — <a href="https://bun.sh">bun.sh</a>
+            Linux x64 ou arm64 — <a href="https://github.com/jrmmendes/md-preview/releases/latest">releases</a>.
           </p>
           <div className={styles.install}>
             <InstallCommand />
           </div>
           <p className={styles.note}>
-            Já instalou? O ajuste de <code>PATH</code> e a verificação estão em{' '}
-            <Link to="/primeiros-passos/instalacao">Instalação</Link>.
+            Já instalou? O <code>PATH</code> e a verificação estão em{' '}
+            <Link to="/primeiros-passos/instalacao">Instalação</Link>. Para outros
+            sistemas, <Link to="/primeiros-passos/compilacao">compile do código-fonte</Link>.
           </p>
         </div>
       </header>

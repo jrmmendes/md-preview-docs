@@ -6,12 +6,17 @@ description: Respostas curtas e a lista do que o md-preview não faz.
 
 ## Está publicado no npm?
 
-Não. O `package.json` é `private: true`. A instalação é por clone e build, como
-na [Instalação](/primeiros-passos/instalacao).
+Não. O `package.json` é `private: true`. A instalação usa o binário da release,
+como na [Instalação](/primeiros-passos/instalacao).
+
+## Há binário para macOS ou Windows?
+
+Não. As releases publicam `md-preview-linux-x64` e `md-preview-linux-arm64`.
+Nesses sistemas, [compile do código-fonte](/primeiros-passos/compilacao).
 
 ## Preciso de Node.js?
 
-Não em tempo de execução: o binário é gerado pelo Bun e não depende do Node.
+Não em tempo de execução: o binário é compilado pelo Bun e não depende do Node.
 
 ## Preciso de um repositório Git?
 

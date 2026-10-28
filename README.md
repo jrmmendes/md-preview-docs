@@ -39,7 +39,8 @@ md-preview-docs/
 │   └── faq.md
 ├── src/
 │   ├── components/
-│   │   └── InstallCommand.tsx  # fonte do bloco de instalação da home e da instalação
+│   │   ├── CompileCommand.tsx  # blocos de clone/build do tutorial de compilação
+│   │   └── InstallCommand.tsx  # tag, hashes e bloco de download da home e da instalação
 │   ├── css/custom.css
 │   └── pages/index.tsx
 ├── static/img/              # logo, favicon e capturas de tela
@@ -49,8 +50,9 @@ md-preview-docs/
 ```
 
 A tag instalada fica em `src/components/InstallCommand.tsx` (`MD_PREVIEW_TAG`),
-a única fonte da versão. Atualizar a release é mudar essa constante; a home e a
-página de instalação usam o mesmo componente, e `MD_PREVIEW_VERSION` (a mesma tag
-sem o `v`) é importada por `docs/primeiros-passos/instalacao.md`. Não repita o
-número em outros arquivos: em blocos de código que servem de exemplo use
+que também monta as URLs de download; `MD_PREVIEW_SHA256` guarda o sha256 de cada
+asset da mesma release. Atualizar a release é mudar essas constantes. A home, a
+instalação e o início rápido usam o mesmo componente, e `MD_PREVIEW_VERSION` (a
+mesma tag sem o `v`) é importada por `docs/primeiros-passos/instalacao.md`. Não
+repita o número em outros arquivos: em blocos de código que servem de exemplo use
 `vX.Y.Z`.

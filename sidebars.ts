@@ -11,6 +11,7 @@ const sidebars: SidebarsConfig = {
         'primeiros-passos/introducao',
         'primeiros-passos/instalacao',
         'primeiros-passos/inicio-rapido',
+        'primeiros-passos/compilacao',
       ],
     },
     {
