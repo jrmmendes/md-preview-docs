@@ -95,7 +95,7 @@ ativo).
 | Exportação para PDF ou HTML | Compartilhar exige outra ferramenta |
 | Admonitions (`:::note`), KaTeX e emoji | Markdown mais simples |
 | Mermaid sem JavaScript | Diagramas aparecem como texto |
-| Realce fora de nove linguagens | Outros fences ficam sem cor |
+| Realce fora da lista de linguagens | Outros fences ficam sem cor |
 | Rota raiz | Toda visita precisa de um slug |
 | Histórico persistente | Recent some ao reiniciar |
 | Abas internas | Um documento por URL |

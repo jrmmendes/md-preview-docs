@@ -46,7 +46,9 @@ histórico vive em memória e some quando o daemon reinicia.
 ## Copiar código
 
 Passar o cursor ou focar um bloco `pre` (que não seja Mermaid) revela o botão
-**Copy**, que usa a API Clipboard. Blocos Mermaid têm controles próprios.
+**Copy**, que usa a API Clipboard. Blocos Mermaid e
+[diff](/recursos/markdown#diff-fences) têm controles próprios e não recebem o
+botão.
 
 ## Fontes
 
@@ -109,4 +111,4 @@ A sensibilidade de zoom aceita valores entre 1,01 e 3.
 | Seletor de fontes | `↑` / `↓`, `Enter`, `Esc` | Navega, aplica, fecha |
 
 Sem JavaScript, o documento continua legível; ficam de fora diagramas,
-histórico, TOC interativo e controles.
+histórico, TOC interativo e controles. Diffs ficam na visão inline.
