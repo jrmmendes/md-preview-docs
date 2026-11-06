@@ -68,7 +68,7 @@ O comando imprime somente o slug final em stdout:
 
 ```bash
 slug=$(cat nota.md | md-preview register --stdin --slug temp/nota)
-echo "http://127.0.0.1:8766/$slug"
+printf '%s\n' "$slug"
 ```
 
 `register` nunca abre o navegador.

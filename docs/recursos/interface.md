@@ -1,7 +1,7 @@
 ---
 title: Interface
 sidebar_position: 3
-description: Layout, sumário, histórico Recent, cópia de código, fontes, loaders, modo zen e painel de configurações.
+description: Layout, sumário, histórico Recent, fechar documento, cópia de código, fontes, loaders, modo zen e painel de configurações.
 ---
 
 A página é renderizada no servidor; o JavaScript cuida de TOC, histórico,
@@ -42,6 +42,24 @@ Alimentado pelo SSE, sem polling: `snapshot` popula a lista ao conectar e
 `slugs` a atualiza a cada registro. A ordem é do mais recente para o mais
 antigo; o título do frontmatter tem prioridade sobre o nome do arquivo. O
 histórico vive em memória e some quando o daemon reinicia.
+
+## Fechar um documento
+
+Cada item do Recent tem um `×` próprio. Não existe um `×` global no cabeçalho.
+
+O `×` desregistra o documento no daemon (`DELETE /__doc/<slug>`): ele sai do
+Recent e deixa de ser observado. O arquivo **não** é apagado do disco e nada é
+gravado em `localStorage`; para voltar a abri-lo, rode `md-preview <arquivo>` de
+novo.
+
+Ao fechar o documento atual — ou o último item da lista — a área do documento dá
+lugar ao estado vazio **No document open**, com o foco no título e a instrução
+para abrir um arquivo pela CLI ou escolher outro item do Recent. Ao fechar outro
+item, o foco vai para o próximo `×`. A região viva anuncia `Document closed`;
+uma falha anuncia `Could not close document` e mantém o item na lista.
+
+A interface não tem seletor de pasta. Para registrar todos os Markdown de um
+diretório, use o comando [`md-preview folder`](/referencia/cli#folder).
 
 ## Copiar código
 
@@ -105,7 +123,7 @@ A sensibilidade de zoom aceita valores entre 1,01 e 3.
 | Contexto | Tecla | Ação |
 | --- | --- | --- |
 | Página | `z` | Alterna o modo zen |
-| Lightbox Mermaid | `Esc` | Fecha |
+| Lightbox (diagrama ou imagem) | `Esc` | Fecha |
 | Tree fence | `Enter` / `Espaço` | Expande ou recolhe |
 | Tree fence | `↑` / `↓` / `←` / `→` | Navega e recolhe/expande |
 | Seletor de fontes | `↑` / `↓`, `Enter`, `Esc` | Navega, aplica, fecha |

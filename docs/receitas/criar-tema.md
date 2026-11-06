@@ -79,9 +79,8 @@ md-preview theme list
 md-preview documento.md --theme meu-tema --open-browser
 ```
 
-Ou abra `http://127.0.0.1:8766/documento?theme=meu-tema`. Editar o JSON dispara
-o evento `themes`; se o tema atual mudou, a aba recarrega. Não é preciso
-reiniciar o daemon.
+Editar o JSON dispara o evento `themes`; se o tema atual mudou, a aba recarrega.
+Não é preciso reiniciar o daemon.
 
 ## Limites
 

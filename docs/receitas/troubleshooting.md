@@ -15,13 +15,15 @@ md-preview theme list
 ## Porta ocupada
 
 ```text
-md-preview: daemon did not become ready on 127.0.0.1:8766
+md-preview: daemon did not become ready on 127.0.0.1:<porta>
 ```
 
+A porta real aparece na mensagem; ela vem do `daemon.json` ou de `MDPRV_PORT`.
 Veja quem está na porta:
 
 ```bash
-ss -ltnp | grep 8766
+port=$(jq -r .port "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json")
+ss -ltnp | grep "$port"
 ```
 
 Se for outro daemon do md-preview, pare-o; se for outro programa, use outra
@@ -68,7 +70,8 @@ Lembre da precedência: `?theme=` vence o cookie, que vence `config.json` e
 catálogo com erros está em:
 
 ```bash
-curl -s http://127.0.0.1:8766/__themes
+port=$(jq -r .port "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json")
+curl -s "http://127.0.0.1:$port/__themes"
 ```
 
 ## Mermaid não aparece
@@ -91,7 +94,8 @@ copiar; use o lightbox.
 | O caminho é relativo? | URLs absolutas não passam por `/img/` |
 
 ```bash
-curl -I "http://127.0.0.1:8766/img/docs/guia/assets/foto.png"
+port=$(jq -r .port "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json")
+curl -I "http://127.0.0.1:$port/img/docs/guia/assets/foto.png"
 ```
 
 Um `404` confirma que o daemon não achou o arquivo; confira maiúsculas, espaços

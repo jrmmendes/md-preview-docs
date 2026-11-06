@@ -5,8 +5,8 @@ description: Endpoints HTTP, autenticação, SSE, estado e ciclo de vida do daem
 ---
 
 O daemon é um servidor HTTP em `127.0.0.1:<porta>` que renderiza documentos e
-expõe endpoints internos. Todos validam `Host` e `Origin`; os que mudam estado
-exigem token.
+expõe endpoints internos. Todos validam `Host` e `Origin`; os que gravam
+conteúdo ou encerram o processo exigem token.
 
 ## Endpoints
 
@@ -22,6 +22,8 @@ exigem token.
 | `GET` | `/__fonts` | Não | Catálogo de fontes |
 | `GET` | `/__fonts/google?family=<F>` | Não | Proxy da folha CSS do Google |
 | `GET` | `/__fonts/file/<sha256>` | Não | `.woff2` em cache |
+| `GET`/`HEAD` | `/__doc?from=<slug>&rel=<nome>` | Não | Registra o destino e redireciona (`302`) |
+| `DELETE` | `/__doc/<slug>` | Não | Desregistra o documento (sem apagar o arquivo) |
 | `GET` | `/<slug>` | Não | Página renderizada |
 | `GET` | `/img/<slug>/<caminho>` | Não | Imagem do documento |
 
@@ -33,9 +35,11 @@ e slugs não registrados recebem `404`. `/` não tem documento raiz.
 `PUT /__register` autentica pelo cabeçalho `x-mdprv-token`.
 
 ```bash
-token=$(jq -r .token "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json")
+state="${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json"
+port=$(jq -r .port "$state")
+token=$(jq -r .token "$state")
 
-curl -s -X PUT http://127.0.0.1:8766/__register \
+curl -s -X PUT "http://127.0.0.1:$port/__register" \
   -H "x-mdprv-token: $token" \
   -H "content-type: application/json" \
   -d '{"slug":"exemplo","content":"# Olá"}'
@@ -52,6 +56,31 @@ Resposta: `{"slug":"exemplo"}`. Sem token: `401`; JSON inválido ou slug vazio:
 
 `POST /__shutdown` responde `bye`, agenda o encerramento e também exige token.
 
+## Navegação entre documentos
+
+`GET`/`HEAD /__doc?from=<slug>&rel=<nome>` resolve um link relativo entre
+documentos:
+
+- `from` precisa ser um slug já registrado com caminho em disco;
+- `rel` é percent-encoded e aceita apenas um arquivo irmão com extensão
+  `.md`, `.markdown` ou `.mdc`; `?query` e `#fragmento` são preservados;
+- a pasta vem do registro do daemon, nunca da requisição; caminho absoluto,
+  `../`, subpastas e symlink que escape da pasta retornam `404`;
+- sucesso registra o destino sob demanda (ele entra no Recent e passa a ser
+  observado) e responde `302` para `/<slug><sufixo>`.
+
+`DELETE /__doc/<slug>` remove um documento já registrado:
+
+- responde `204` sem corpo e não apaga o arquivo do disco; apenas desregistra,
+  tira do Recent e para de observar;
+- só aceita um slug **já** registrado, então não serve para sondar o filesystem;
+  slug desconhecido ou vazio recebe `404`;
+- não exige token nem corpo e não aceita caminho; valida `Host`/`Origin` e exige
+  `Sec-Fetch-Site` same-origin/none, porque é chamado pelo navegador.
+
+Não existe rota `/__folder`: para registrar uma pasta inteira, use o comando
+[`md-preview folder`](/referencia/cli#folder).
+
 ## SSE
 
 `GET /__events` mantém a conexão aberta (`text/event-stream`, `no-cache`).
@@ -67,7 +96,8 @@ Resposta: `{"slug":"exemplo"}`. Sem token: `401`; JSON inválido ou slug vazio:
 ## Catálogo e assets
 
 ```bash
-curl -s http://127.0.0.1:8766/__themes
+port=$(jq -r .port "${XDG_STATE_HOME:-$HOME/.local/state}/md-preview/daemon.json")
+curl -s "http://127.0.0.1:$port/__themes"
 # {"themes":["auto","dracula",...],"errors":[]}
 ```
 

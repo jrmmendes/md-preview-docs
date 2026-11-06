@@ -103,4 +103,4 @@ ativo).
 | Acesso remoto, TLS e colaboração | Uso restrito à mesma máquina |
 | Interface traduzida | Rótulos fixos, majoritariamente em inglês |
 
-Não exponha a porta `8766`: o daemon foi feito para loopback.
+Não exponha a porta do daemon: ele foi feito para loopback.

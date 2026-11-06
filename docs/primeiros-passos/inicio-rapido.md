@@ -43,13 +43,13 @@ EOF
 ## 4. Inicie o preview
 
 ```bash
-md-preview ola.md
+md-preview ola.md    # porta padrão: 8766
 ```
 
 A CLI inicia o daemon sob demanda e imprime:
 
 ```text
-http://127.0.0.1:8766/notas/ola
+http://127.0.0.1:<porta>/notas/ola
 ```
 
 Abra a URL. O comando não abre o navegador sozinho; para abrir, use

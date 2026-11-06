@@ -1,7 +1,7 @@
 ---
 title: Markdown
 sidebar_position: 1
-description: Sintaxe, frontmatter, blocos de código, diff, Mermaid, tree fences e imagens relativas.
+description: Sintaxe, links entre documentos, frontmatter, blocos de código, diff, Mermaid, tree fences e imagens relativas.
 ---
 
 O md-preview usa `markdown-it` com HTML inline, linkify e typographer, além das
@@ -37,6 +37,33 @@ Uma nota de rodapé.[^1]
 
 [^1]: O texto da nota aparece no fim do documento.
 ````
+
+## Links entre documentos
+
+Links Markdown para um arquivo irmão no mesmo diretório abrem o preview do
+destino, em vez de baixar o `.md`:
+
+```markdown
+Veja [o outro documento](./outro.md) e a [seção de exemplos](./outro.md#exemplos).
+```
+
+Regras:
+
+- o alvo precisa ter extensão `.md`, `.markdown` ou `.mdc`;
+- só vale para o mesmo diretório; `./` inicial é opcional;
+- `?query` e `#ancora` são preservados; quando o link não traz query própria, o
+  `?theme=` da URL atual é propagado;
+- o destino é registrado sob demanda e passa a ser observado (entra no Recent);
+- o documento de origem precisa ter caminho em disco, como nas imagens
+  relativas.
+
+Não são reescritos e mantêm o comportamento padrão do navegador: `../`,
+subpastas (`sub/arquivo.md`), caminhos absolutos (`/...`), links sem extensão,
+URLs externas, `#ancora` puro e `<a href>` escrito em HTML cru.
+
+Um link para arquivo inexistente é marcado com o aviso **Document not found**;
+clicar nele anuncia a mensagem na região viva e não navega. Caminhos com
+traversal ou symlink que escape da pasta retornam `404`.
 
 ## Frontmatter
 
@@ -82,8 +109,8 @@ servidor. O fence aceita o nome completo ou um alias:
 | XML | `xml` | — |
 
 ```ts
-export function url(slug: string): string {
-  return `http://127.0.0.1:8766/${slug}`;
+export function path(slug: string): string {
+  return `/${slug}`;
 }
 ```
 
@@ -237,8 +264,17 @@ flowchart LR
 ````
 
 A biblioteca é servida localmente em `/__assets/mermaid.min.js`, sem CDN. Sem
-JavaScript, o bloco aparece como texto. Clique no diagrama para abrir o
-lightbox com zoom (rolagem ou botões), arrastar e `Esc` para fechar.
+JavaScript, o bloco aparece como texto. Cada diagrama recebe o botão **View
+diagram full screen**; o clique no diagrama em si não abre nada.
+
+No lightbox, use a rolagem do mouse ou os botões para dar zoom, o botão de
+porcentagem para voltar a 100%, e arraste para mover o diagrama. `Esc`, o botão
+de fechar ou um clique no fundo encerram a visualização.
+
+O botão **Copy diagram as image** gera um PNG do diagrama. Se a área de
+transferência de imagem não estiver disponível — ou a geração do PNG falhar —,
+ele copia o código-fonte do diagrama como texto; os dois casos mostram o check
+de confirmação.
 
 <figure>
   <img src="/img/features/mermaid-lightbox.png" alt="Diagrama Mermaid ampliado em lightbox com controles de zoom e reset" />
@@ -305,6 +341,19 @@ Regras:
 
 Documentos registrados por `register --stdin` sem `--path` não têm diretório,
 portanto não resolvem imagens relativas.
+
+## Imagens no lightbox
+
+Imagens de conteúdo com `alt` não vazio ganham um botão de tela cheia, com o
+texto do `alt` no rótulo. O mesmo lightbox dos diagramas abre a imagem, com
+zoom, arrastar e fechamento por `Esc`, botão ou clique no fundo.
+
+Ficam de fora as imagens decorativas: `alt=""`, `role="presentation"`,
+`aria-hidden="true"` e `data-no-lightbox`.
+
+O botão **Copy image** copia a imagem como PNG; formatos diferentes são
+convertidos antes da cópia. Se a origem bloquear CORS ou a rede falhar, o botão
+mostra o erro em vez de copiar.
 
 ## HTML inline
 

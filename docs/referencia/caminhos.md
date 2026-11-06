@@ -46,7 +46,7 @@ temporários não são apagados automaticamente.
 | Variável | Padrão | Efeito |
 | --- | --- | --- |
 | `MDPRV_CONFIG_DIR` | `${XDG_CONFIG_HOME:-~/.config}/md-preview` | Raiz de configuração e temas |
-| `MDPRV_PORT` | `8766` | Porta do daemon |
+| `MDPRV_PORT` | — | Sobrescreve a porta do daemon; a porta efetiva é a do `daemon.json` |
 | `MDPRV_IDLE` | `15` | Minutos de inatividade |
 | `MDPRV_THEME` | `auto` | Tema padrão |
 | `MDPRV_LOADER` | `classic` | Loader de navegação |

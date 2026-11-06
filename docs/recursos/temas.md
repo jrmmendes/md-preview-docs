@@ -38,7 +38,7 @@ quebra.
 
 - **CLI:** `md-preview guia.md --theme nord` valida o nome e acrescenta
   `?theme=nord` às URLs.
-- **URL:** `http://127.0.0.1:8766/docs/guia?theme=solarized-light`.
+- **URL:** acrescente `?theme=solarized-light` à URL impressa pela CLI.
 - **Painel:** o seletor grava o cookie `mdprv_theme` e recarrega a página.
 - **Configuração:** `"theme": "nord"` em `config.json`, ou `MDPRV_THEME=nord`
   para uma invocação.

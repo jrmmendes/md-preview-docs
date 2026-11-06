@@ -40,8 +40,8 @@ export default function Home() {
         <div className={styles.heroInner}>
           <h1 className={styles.title}>md-preview</h1>
           <p className={styles.tagline}>
-            Renderiza Markdown local em <code>127.0.0.1:8766</code> com live
-            reload, temas e diagramas Mermaid.
+            Renderiza Markdown local no navegador com live reload, temas e
+            diagramas Mermaid.
           </p>
           <p className={styles.note}>
             Linux x64 ou arm64 — <a href="https://github.com/jrmmendes/md-preview/releases/latest">releases</a>.

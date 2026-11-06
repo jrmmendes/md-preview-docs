@@ -6,7 +6,7 @@ description: Loopback, validação de Host e Origin, token, CSP com nonce e imag
 
 O daemon é um servidor HTTP local, mas continua acessível pelo navegador. O
 modelo assume que outras páginas e abas podem tentar falar com
-`127.0.0.1:8766`.
+`127.0.0.1:<porta>`.
 
 | Ameaça | Defesa |
 | --- | --- |
@@ -22,8 +22,8 @@ modelo assume que outras páginas e abas podem tentar falar com
 
 O daemon gera um token aleatório na inicialização e grava o estado:
 
-```json
-{ "pid": 48211, "port": 8766, "token": "..." }
+```text
+{ "pid": 48211, "port": <porta>, "token": "..." }
 ```
 
 O arquivo fica em `${XDG_STATE_HOME:-~/.local/state}/md-preview/daemon.json`. A
@@ -50,11 +50,19 @@ caminho em disco, que a imagem esteja dentro do diretório do documento e que a
 extensão seja de imagem conhecida. `..` e symlinks que apontam para fora do
 diretório retornam erro.
 
+`GET`/`HEAD /__doc` e `DELETE /__doc/<slug>` não exigem token porque só atuam
+no escopo do slug já registrado: o primeiro resolve apenas Markdown irmão dentro
+da pasta desse slug, sem aceitar caminho absoluto, e o segundo desregistra um
+slug existente. O `DELETE` não apaga o arquivo: apenas remove o documento do
+Recent e para de observá-lo. A gravação continua exigindo token, e os dois
+endpoints mantêm a validação de `Host`/`Origin` (o `DELETE` também exige
+`Sec-Fetch-Site` same-origin/none).
+
 ## O que não está protegido
 
 O md-preview não protege contra um processo local com os mesmos privilégios do
 seu usuário, malware que leia o estado `0600`, bugs do navegador explorados por
 HTML inline ou a exposição deliberada da porta por proxy reverso ou túnel.
 
-Não publique a porta `8766`. Se precisar compartilhar um documento, use outro
+Não publique a porta do daemon. Se precisar compartilhar um documento, use outro
 meio.

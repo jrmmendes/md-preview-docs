@@ -28,7 +28,7 @@ Opções em `opts`:
 ```lua
 require("md-preview").setup({
   binary = "~/.local/bin/md-preview", -- opcional; usa o PATH por padrão
-  port = 8766,                        -- usada ao iniciar o daemon
+  -- port = <porta>,                 -- opcional, usada ao iniciar o daemon
   theme = "auto",
   loader = "classic",
   open_browser = true,

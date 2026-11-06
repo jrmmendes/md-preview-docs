@@ -5,7 +5,7 @@ description: O que é o md-preview, como um arquivo vira uma URL local e quais e
 ---
 
 **md-preview** é uma CLI que registra arquivos Markdown em um daemon local. O
-daemon renderiza o documento e serve uma URL em `127.0.0.1:8766`; ao salvar o
+daemon renderiza o documento e serve uma URL local impressa pela CLI; ao salvar o
 arquivo, a página recarrega.
 
 Sem `--open-browser`, a CLI só imprime uma URL por arquivo. Isso permite usá-la
@@ -13,7 +13,6 @@ em scripts e editores. O navegador é aberto apenas quando a flag é passada.
 
 ```bash
 md-preview docs/guia.md
-# http://127.0.0.1:8766/docs/guia
 ```
 
 ## Como funciona

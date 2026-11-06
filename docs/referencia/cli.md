@@ -55,17 +55,18 @@ observado, então o live reload funciona.
 | `theme seed` | Cria temas embutidos ausentes |
 | `config init` | Cria `config.json` sem sobrescrever |
 | `register` | Registra Markdown de stdin |
+| `folder [dir]` | Registra os Markdown de uma pasta e abre um preview |
 
 ### `daemon`
 
 | Comando | Saída típica | Código |
 | --- | --- | --- |
-| `start` | `md-preview daemon started (pid 48211, port 8766)` | `0` |
-| `start` (já ativo) | `md-preview daemon already running (pid 48211, port 8766)` | `0` |
+| `start` | `md-preview daemon started (pid 48211, port <porta>)` | `0` |
+| `start` (já ativo) | `md-preview daemon already running (pid 48211, port <porta>)` | `0` |
 | `stop` | `md-preview daemon stopped` | `0` |
 | `stop` (parado) | `md-preview daemon is not running` | `0` |
 | `stop` (estado obsoleto) | `md-preview daemon was not running (removed stale state)` | `0` |
-| `status` (ativo) | `md-preview daemon running (pid 48211, port 8766)` | `0` |
+| `status` (ativo) | `md-preview daemon running (pid 48211, port <porta>)` | `0` |
 | `status` (parado) | `md-preview daemon stopped` | `1` |
 
 O código `1` de `status` é intencional:
@@ -116,6 +117,33 @@ cat doc.md | md-preview register --stdin --slug docs/doc --path doc.md
 | stdin é TTY | Erro, código `1` |
 | Sucesso | Imprime **somente** o slug em stdout |
 | Navegador | Nunca abre |
+
+### `folder`
+
+```text
+Usage: md-preview folder [options] [dir]
+
+Arguments:
+  dir         folder to scan (defaults to the current directory)
+```
+
+`md-preview folder` registra todos os Markdown regulares **diretamente** na
+pasta informada — sem entrar em subpastas — e abre um preview no navegador. O
+argumento é opcional; sem ele, vale o diretório atual.
+
+| Regra | Comportamento |
+| --- | --- |
+| Extensões | `.md`, `.markdown` e `.mdc` |
+| Ignorados | nomes ocultos (começando por `.`), subpastas e symlinks |
+| Limite | 200 arquivos; o excedente é ignorado com aviso em stderr |
+| Slug | derivado do nome do arquivo, sem caminho absoluto |
+| Preview aberto | `index.md` quando existe; senão o primeiro nome em ordem alfabética |
+| Saída | uma URL por arquivo registrado |
+| `dir` inexistente ou sem Markdown | erro em stderr e código `1` |
+
+```bash
+md-preview folder ~/notas
+```
 
 ## Códigos de saída
 
