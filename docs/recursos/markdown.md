@@ -316,6 +316,24 @@ meu-projeto
 - nomes são sempre texto escapado; se o corpo não parecer uma árvore, o fence
   volta a ser um bloco de código.
 
+### Comentários e indentação
+
+Cada entrada aceita um comentário inline depois do nome, separado por espaço.
+Ele aparece na mesma linha, em texto suave:
+
+```tree
+src/
+  core/     # renderização, config e temas
+  ui/       # cliente do navegador
+tests/      # testes de unidade e integração
+```
+
+O comentário só começa quando o `#` é precedido por espaço e existe um nome
+antes dele; nomes como `file#1.ts` e `C#/` ficam intactos. Linhas que são só
+comentário (`# nota`) aparecem na profundidade correspondente e não contam como
+itens da árvore. Árvores apenas por indentação, sem conectores, também são
+aceitas.
+
 ## Imagens relativas
 
 Imagens com caminho relativo são reescritas para `/img/<slug>/...` e servidas a
