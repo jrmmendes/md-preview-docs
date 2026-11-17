@@ -1,11 +1,12 @@
 ---
 title: Interface
 sidebar_position: 3
-description: Layout, sumário, histórico Recent, fechar documento, cópia de código, fontes, loaders, modo zen e painel de configurações.
+description: Layout, sumário, histórico Recent, fechar documento, tabelas interativas, cópia de código, fontes, loaders, modo zen e painel de configurações.
 ---
 
 A página é renderizada no servidor; o JavaScript cuida de TOC, histórico,
-fontes, Mermaid, tree fences, cópia de código, loader e layout.
+fontes, Mermaid, tree fences, tabelas interativas, cópia de código, loader e
+layout.
 
 <figure>
   <img src="/img/features/ui-overview.png" alt="Tela do md-preview com sumário à esquerda, documento ao centro e histórico Recent à direita" />
@@ -67,6 +68,44 @@ Passar o cursor ou focar um bloco `pre` (que não seja Mermaid) revela o botão
 **Copy**, que usa a API Clipboard. Blocos Mermaid e
 [diff](/recursos/markdown#diff-fences) têm controles próprios e não recebem o
 botão.
+
+## Tabelas interativas
+
+Cada tabela GFM e cada fence `csv` ganha uma toolbar com pesquisa, cabeçalho da
+primeira linha/coluna, pivô, cópia e tela cheia. A grade mostra letras nas
+colunas e números nas linhas; clique em uma letra ou número para selecionar a
+coluna ou a linha inteira.
+
+| Contexto | Controle | Ação |
+| --- | --- | --- |
+| Grade | clique, arraste | seleciona célula ou intervalo |
+| Grade | `Shift`+clique/seta | estende a seleção a partir da âncora |
+| Grade | `Ctrl`/`Cmd`+clique | soma um novo intervalo à seleção |
+| Grade | setas, `Home`, `End`, `PageUp`, `PageDown` | navega entre células |
+| Grade | `Esc` | limpa a seleção; com a pesquisa aberta, fecha e limpa o filtro |
+| Cabeçalho | clique ou `Enter`/`Espaço` | ordena asc → desc → ordem original |
+| Cabeçalho | funil | abre o filtro por valor da coluna |
+| Alça da letra | arraste, setas, duplo clique ou `Home` | redimensiona ou ajusta ao conteúdo |
+| Toolbar | copiar | TSV do intervalo selecionado ou Markdown da tabela exibida |
+| Toolbar | tela cheia | abre o diálogo com zoom de 60% a 220% |
+
+O popover do funil tem busca interna, frequência por valor, **Selecionar
+todos** e **Limpar**; o contador da toolbar considera a pesquisa global e todos
+os filtros de coluna. A pesquisa abre à esquerda com fade e não desloca os
+outros botões. O pivô desliga temporariamente o cabeçalho e a ordenação e limpa
+os filtros por coluna; ao voltar, restaura o cabeçalho e a ordenação anteriores.
+
+No diálogo de tela cheia, o bloco é movido para o palco — filtros, seleção e
+larguras continuam os mesmos. Arraste para rolar, use `+`/`−` para o zoom e o
+botão de porcentagem para voltar a 100%; `Esc`, o botão de fechar ou um clique
+no fundo encerram. O zoom usa a escala do bloco, não o `font-size` do documento,
+então a grade mantém o alinhamento.
+
+O estado é só de memória: recarregar restaura filtros, ordenação, seleção,
+larguras e pivô. A toolbar fica escondida até o JavaScript iniciar; sem ele, a
+tabela continua legível e rolável. A grade acompanha o tamanho de fonte do
+documento; o zoom do diálogo usa uma escala própria sobre o bloco inteiro, sem
+mexer no `font-size`.
 
 ## Fontes
 

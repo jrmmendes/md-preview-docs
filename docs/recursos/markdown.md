@@ -13,6 +13,7 @@ extensões GFM de tabelas, riscado, task lists, footnotes e âncoras.
 | --- | --- | --- |
 | CommonMark | `# título`, listas, citações, links | Comportamento padrão |
 | Tabelas GFM | `\| coluna \|` | Alinhamento com `:---`, `:---:`, `---:` |
+| CSV | fence `csv` | Primeira linha vira cabeçalho |
 | Riscado | `~~texto~~` | Renderiza `<s>` |
 | Task lists | `- [x] feito` | Checkbox somente leitura |
 | Footnotes | `texto[^1]` | Nota ao final do documento |
@@ -248,6 +249,74 @@ legível na visão inline; só a troca fica indisponível.
 
 Diffs com mais de 2000 linhas são renderizados sem realce de sintaxe. Blocos
 `diff` não têm botão de copiar.
+
+## Tabelas interativas
+
+Toda tabela GFM vira uma grade no estilo planilha, com faixas de letras nas
+colunas e de números nas linhas, cabeçalho na primeira linha e números
+alinhados à direita. A tabela continua sendo um `<table>` válido: sem
+JavaScript, a toolbar fica escondida e o conteúdo segue legível.
+
+A toolbar reúne os controles:
+
+| Controle | Ação |
+| --- | --- |
+| Lupa | abre a pesquisa global, que filtra as linhas enquanto você digita |
+| **1ª linha** | liga/desliga o cabeçalho da primeira linha (ordenação e funis) |
+| **1ª coluna** | usa a primeira coluna como rótulo fixo de linha |
+| ⇄ | pivota a tabela (troca linhas e colunas) |
+| Copiar | copia o intervalo selecionado como TSV ou a tabela exibida como Markdown |
+| Tela cheia | abre a tabela em um diálogo com zoom de 60% a 220% |
+
+Clique em uma célula para selecioná-la; arraste, use `Shift`+clique ou
+`Ctrl`/`Cmd`+clique para intervalos e multi-intervalos. As setas navegam,
+`Shift`+seta estende a seleção, `Home`/`End` vão ao início/fim da linha,
+`PageUp`/`PageDown` pulam cinco linhas e `Esc` limpa a seleção. As faixas de
+letra e número também selecionam a coluna ou a linha inteira.
+
+Com o cabeçalho da primeira linha ligado, cada coluna tem um funil: ele abre um
+popover com busca de valor, frequência, **Selecionar todos** e **Limpar**. A
+pesquisa global e os filtros por coluna se combinam; o contador mostra quantas
+linhas sobraram. Clicar no nome da coluna ordena em ordem crescente,
+decrescente e, no terceiro clique, volta à ordem original.
+
+Arraste a alça à direita da letra para redimensionar a coluna; duplo clique ou
+`Home` com a alça focada ajusta a coluna ao conteúdo. As setas esquerda/direita
+redimensionam em passos de 16 px.
+
+O estado de cada tabela (filtros, ordenação, seleção, larguras, pivô e raw) vive
+apenas na memória da página. Recarregar volta ao estado inicial; nenhuma chave
+de `localStorage` é criada.
+
+```markdown
+| Página | Acessos | Status |
+| :--- | ---: | :---: |
+| Início | 128.402 | Falha |
+| Catálogo | 96.115 | Aprovado |
+```
+
+## CSV
+
+Um fence `csv` renderiza a mesma grade, com a primeira linha como cabeçalho. O
+separador é detectado na primeira linha (vírgula, ponto e vírgula ou tabulação),
+e campos entre aspas aceitam o separador e quebras de linha:
+
+````markdown
+```csv
+nome;valor;data
+Ana Beatriz;1.234,50;12/08/2026
+"Silva, Carlos";2,5;14/08/2026
+```
+````
+
+Campos vazios são preservados; colunas numéricas (incluindo `R$`, `%` e o
+formato pt-BR `1.234,56`) ficam alinhadas à direita e ordenam pelo valor.
+
+O botão **Raw** troca a grade pelo corpo original do fence, realçado como CSV.
+Enquanto o modo Raw do documento estiver aberto, o botão do bloco fica
+desabilitado e a grade entra em raw junto com o restante da página; ao fechar a
+visão raw do documento, o estado anterior do bloco volta. Um fence vazio ou com
+aspas não fechadas volta a ser um bloco de código.
 
 ## Mermaid
 
