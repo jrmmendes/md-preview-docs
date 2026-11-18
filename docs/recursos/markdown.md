@@ -253,6 +253,21 @@ legível na visão inline; só a troca fica indisponível.
 Diffs com mais de 2000 linhas são renderizados sem realce de sintaxe. Blocos
 `diff` não têm botão de copiar.
 
+### Modo simples de diff
+
+O painel de configurações tem a opção **Modo simples de diff**. Com ela ligada,
+todo diff da página — inclusive uma saída completa do `git diff` — mostra
+apenas as linhas de adição, remoção e contexto. Os metadados de arquivo
+(`diff --git`, `index`, o par `---`/`+++`, `new file mode`, `rename from`/`to`,
+`Binary files`, ...) e os cabeçalhos de hunk `@@ ... @@` ficam ocultos.
+
+As cores, a fonte e o realce não mudam; os números de linha continuam os do
+diff original. Hunks e arquivos consecutivos ficam visualmente contíguos, sem
+linha em branco extra entre eles, e a redução vale nas visões inline e lado a
+lado. A preferência é independente do modo simples de tabela, fica em
+`localStorage` na chave `mdprv_simple_diff` (`1` ou `0`) e a alternância no
+painel é imediata, sem recarregar a página.
+
 ## Tabelas interativas
 
 Toda tabela GFM vira uma grade no estilo planilha, com faixas de letras nas

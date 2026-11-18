@@ -226,8 +226,12 @@ foco está em campos de texto ou há `Ctrl`, `Cmd` ou `Alt` pressionado.
 | Fonte | `localStorage` `mdprv_font` | sistema |
 | Loader | `localStorage` `mdprv_loader` | `classic` |
 | Zoom do Mermaid | `localStorage` `mdprv_zoom_sensitivity` | `1.1` |
+| Modo simples de diff | `localStorage` `mdprv_simple_diff` | desligado |
 
-A sensibilidade de zoom aceita valores entre 1,01 e 3.
+A sensibilidade de zoom aceita valores entre 1,01 e 3. O modo simples de diff
+oculta metadados de arquivo e cabeçalhos de hunk, deixando só as linhas de
+adição, remoção e contexto — veja
+[Diff fences](/recursos/markdown#modo-simples-de-diff).
 
 ## Atalhos
 
