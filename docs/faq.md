@@ -54,8 +54,10 @@ Não. Ele encerra após 15 minutos ociosos. `MDPRV_IDLE` muda o limite e
 
 ## Por que o navegador não abriu?
 
-Sem `--open-browser`, a CLI só imprime a URL. Se a flag falhar, o sistema não
-tem `xdg-open`, `open` ou `explorer.exe`; copie a URL manualmente.
+Por padrão a primeira execução abre o navegador e as seguintes focam a aba já
+conectada. Use `--no-open-browser` para nunca abrir: a CLI só imprime a URL. Se
+a abertura falhar, o sistema não tem `xdg-open`, `open` ou `explorer.exe`; copie
+a URL manualmente.
 
 ## Como faço um PDF?
 

@@ -24,8 +24,9 @@ md-preview README.md docs/guia.markdown .cursor/rules.mdc
 ```
 
 Aceita `.md`, `.markdown` e `.mdc`. Imprime uma URL por arquivo, na ordem dos
-argumentos. O navegador só abre com `--open-browser`, uma vez, no primeiro
-arquivo.
+argumentos. A primeira execução abre o navegador no primeiro arquivo; depois a
+aba conectada é focada/navegada. `--open-browser` força a abertura e
+`--no-open-browser` só registra.
 
 ## Pipe
 

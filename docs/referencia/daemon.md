@@ -14,6 +14,7 @@ conteúdo ou encerram o processo exigem token.
 | --- | --- | --- | --- |
 | `GET`/`HEAD` | `/__health` | Não | Saúde e versão |
 | `PUT` | `/__register` | Sim | Registra conteúdo |
+| `POST` | `/__activate` | Sim | Foca/navega uma aba conectada ou pede abertura |
 | `POST` | `/__shutdown` | Sim | Encerra o daemon |
 | `GET` | `/__events` | Não | Fluxo SSE |
 | `GET` | `/__themes` | Não | Catálogo e erros de validação |
@@ -54,7 +55,34 @@ curl -s -X PUT "http://127.0.0.1:$port/__register" \
 Resposta: `{"slug":"exemplo"}`. Sem token: `401`; JSON inválido ou slug vazio:
 `400`.
 
+Registrar o mesmo conteúdo de novo **não** incrementa a versão, então uma
+segunda chamada da CLI não recarrega a aba aberta; só conteúdo novo (ou um slug
+novo) emite `version`.
+
 `POST /__shutdown` responde `bye`, agenda o encerramento e também exige token.
+
+## Ativação de aba
+
+`POST /__activate` autentica pelo cabeçalho `x-mdprv-token` e recebe
+`{"slug":"<alvo>","url":"<url>"}`. A URL precisa ser do mesmo `Host` do daemon;
+caso contrário, `400`.
+
+| Situação | Resposta | Efeito |
+| --- | --- | --- |
+| Aba com `doc=<alvo>` conectada | `{"action":"focused"}` | Envia `activate` só para essas abas |
+| Abas conectadas em outro documento | `{"action":"navigated"}` | Envia `activate` para a aba mais recente navegar |
+| Nenhuma aba conectada | `{"action":"opened","first":<bool>}` | A CLI chama o opener |
+
+Após uma abertura recente (até 6 s), a rota espera até 1,2 s por uma aba que
+ainda está conectando antes de concluir que não há nenhuma. `first` é `true`
+quando o navegador ainda não tinha sido aberto naquela sessão do daemon.
+
+```bash
+curl -s -X POST "http://127.0.0.1:$port/__activate" \
+  -H "x-mdprv-token: $token" \
+  -H "content-type: application/json" \
+  -d '{"slug":"exemplo","url":"/exemplo"}'
+```
 
 ## Navegação entre documentos
 
@@ -78,20 +106,27 @@ documentos:
 - não exige token nem corpo e não aceita caminho; valida `Host`/`Origin` e exige
   `Sec-Fetch-Site` same-origin/none, porque é chamado pelo navegador.
 
-Não existe rota `/__folder`: para registrar uma pasta inteira, use o comando
-[`md-preview folder`](/referencia/cli#folder).
+Não existe rota `/__folder`: para registrar uma pasta inteira, use
+[`md-preview <pasta>`](/referencia/cli#abrindo-uma-pasta).
 
 ## SSE
 
-`GET /__events` mantém a conexão aberta (`text/event-stream`, `no-cache`).
+`GET /__events?doc=<slug>` mantém a conexão aberta (`text/event-stream`,
+`no-cache`). O `doc` opcional informa qual documento a aba está mostrando; o
+daemon usa essa informação para focar a aba certa em vez de abrir outra.
 
 | Evento | Conteúdo | Quando |
 | --- | --- | --- |
 | `snapshot` | `{ versions, slugs }` | Ao conectar |
-| `version` | slug e versão | Mudança no disco |
+| `version` | slug e versão | Mudança no disco ou conteúdo novo |
 | `slugs` | lista de documentos | Novo registro |
 | `themes` | mudança no catálogo | Tema alterado |
+| `activate` | `{ slug, url, ts }` | Uma execução da CLI quer mostrar o documento |
 | `ping` | `{ ts }` | A cada 20 s |
+
+O cliente trata `activate` assim: mesmo documento → tenta focar; documento
+diferente → navega a própria aba, sem criar outra. A URL é sempre relativa ao
+mesmo daemon (`pathname` + `search`).
 
 ## Catálogo e assets
 
@@ -120,7 +155,9 @@ Sem `fc-list`, o catálogo traz `available: false` e as famílias genéricas.
 
 O daemon grava `{ pid, port, token }` em
 `${XDG_STATE_HOME:-~/.local/state}/md-preview/daemon.json`, com permissão
-`0600`. A CLI lê esse arquivo para autenticar.
+`0600`. A CLI lê esse arquivo para autenticar. Na mesma sessão, também grava
+`browserOpened`, `browserOpenedAt` e `browserUrl` (última URL entregue ao
+opener); esses campos são apagados junto com o estado quando o daemon para.
 
 - primeira invocação inicia o daemon automaticamente;
 - `POST /__shutdown` ou `daemon stop` encerra e remove o estado;

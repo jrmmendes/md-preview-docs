@@ -8,8 +8,10 @@ description: O que é o md-preview, como um arquivo vira uma URL local e quais e
 daemon renderiza o documento e serve uma URL local impressa pela CLI; ao salvar o
 arquivo, a página recarrega.
 
-Sem `--open-browser`, a CLI só imprime uma URL por arquivo. Isso permite usá-la
-em scripts e editores. O navegador é aberto apenas quando a flag é passada.
+Sem flags, a CLI abre o navegador na primeira execução e, nas seguintes, foca a
+aba já conectada (navegando nela se o documento mudou). `--no-open-browser`
+imprime só a URL, o que permite usá-la em scripts e editores;
+`--open-browser` força uma abertura.
 
 ```bash
 md-preview docs/guia.md

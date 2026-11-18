@@ -60,7 +60,44 @@ item, o foco vai para o próximo `×`. A região viva anuncia `Document closed`;
 uma falha anuncia `Could not close document` e mantém o item na lista.
 
 A interface não tem seletor de pasta. Para registrar todos os Markdown de um
-diretório, use o comando [`md-preview folder`](/referencia/cli#folder).
+diretório, use [`md-preview <pasta>`](/referencia/cli#abrindo-uma-pasta).
+
+## Aba, foco e navegação
+
+Cada aba conectada informa ao daemon, na conexão SSE (`/__events?doc=<slug>`),
+qual documento está mostrando. Quando a CLI registra outro arquivo, o daemon
+escolhe o destino sem abrir uma aba nova:
+
+| Situação | O que a aba faz |
+| --- | --- |
+| Já mostra o documento pedido | só tenta trazer a aba para frente |
+| Mostra outro documento | navega a própria aba para a URL nova |
+| Nenhuma aba conectada | a CLI chama o opener do sistema |
+
+A navegação é uma troca de documento na mesma aba, com o loader normal;
+`?theme=` da URL nova é preservado. Se a aba já está no destino, não há recarga:
+o evento `activate` só pede foco.
+
+O foco é melhor esforço porque o navegador exige gesto do usuário para uma
+página em segundo plano trazer a janela para frente. Ao receber `activate`, o
+cliente chama `window.focus()` e, quando a aba está oculta ou sem foco:
+
+- prefixa o título com `●` (`● notas.md`) até a aba voltar a ficar visível e
+  focada;
+- marca o ícone com `navigator.setAppBadge(1)`, limpando em
+  `clearAppBadge()` ao focar;
+- se a permissão de notificações **já** estiver concedida, mostra uma
+  notificação curta cujo clique tenta focar a aba. A permissão nunca é pedida
+  automaticamente.
+
+Se o navegador ignorar `window.focus()`, a aba continua no lugar: o título, o
+badge e a notificação (quando permitida) são as pistas para encontrá-la. O
+md-preview não usa `wmctrl`, `xdotool` ou XDG Activation para manipular janelas
+do sistema — isso não é portátil e não funciona na maioria dos ambientes
+Wayland.
+
+Para reabrir com uma aba nova, feche a aba atual (ou use `--open-browser`). Se
+todas as abas forem fechadas, a próxima execução abre o navegador normalmente.
 
 ## Copiar código
 

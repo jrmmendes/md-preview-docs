@@ -52,8 +52,9 @@ A CLI inicia o daemon sob demanda e imprime:
 http://127.0.0.1:<porta>/notas/ola
 ```
 
-Abra a URL. O comando não abre o navegador sozinho; para abrir, use
-`md-preview ola.md --open-browser`.
+O comando abre o navegador automaticamente na primeira execução; nas seguintes,
+ele foca a aba já aberta. Use `--no-open-browser` para não abrir nem focar nada,
+ou `--open-browser` para forçar uma nova abertura.
 
 ## 5. Edite e veja recarregar
 

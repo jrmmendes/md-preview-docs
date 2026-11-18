@@ -51,14 +51,19 @@ vim.keymap.set("n", "<leader>mp", function()
   if vim.bo.modified then
     vim.cmd.write()
   end
-  vim.fn.jobstart({ "md-preview", file, "--open-browser" }, { detach = true })
+  vim.fn.jobstart({ "md-preview", file }, { detach = true })
 end, { desc = "md-preview" })
 ```
 
-Sem abrir o navegador, capture a URL:
+A primeira chamada abre o navegador; as seguintes focam a aba já aberta e
+navegam nela quando o buffer muda. Não adicione `--open-browser` aqui, ou cada
+chamada abrirá uma aba nova. Use `--no-open-browser` quando não quiser abrir nem
+focar nada.
+
+Para só capturar a URL, sem abrir nem focar:
 
 ```lua
-local out = vim.fn.system({ "md-preview", file })
+local out = vim.fn.system({ "md-preview", file, "--no-open-browser" })
 local url = vim.trim(out):match("http://[^%s]+")
 if url then
   vim.fn.setreg("+", url)
