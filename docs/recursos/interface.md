@@ -72,22 +72,26 @@ botão.
 ## Tabelas interativas
 
 Cada tabela GFM e cada fence `csv` ganha uma toolbar com pesquisa, cabeçalho da
-primeira linha/coluna, pivô, cópia e tela cheia. A grade mostra letras nas
-colunas e números nas linhas; clique em uma letra ou número para selecionar a
-coluna ou a linha inteira.
+primeira linha/coluna, pivô, cópia e tela cheia; o `csv` acrescenta o **Raw** do
+bloco. A grade mostra letras nas colunas e números nas linhas; clique em uma
+letra ou número para selecionar a coluna ou a linha inteira.
 
 | Contexto | Controle | Ação |
 | --- | --- | --- |
 | Grade | clique, arraste | seleciona célula ou intervalo |
 | Grade | `Shift`+clique/seta | estende a seleção a partir da âncora |
 | Grade | `Ctrl`/`Cmd`+clique | soma um novo intervalo à seleção |
-| Grade | setas, `Home`, `End`, `PageUp`, `PageDown` | navega entre células |
+| Grade | setas, `Home`/`End`, `PageUp`/`PageDown` | navega entre células |
 | Grade | `Esc` | limpa a seleção; com a pesquisa aberta, fecha e limpa o filtro |
 | Cabeçalho | clique ou `Enter`/`Espaço` | ordena asc → desc → ordem original |
 | Cabeçalho | funil | abre o filtro por valor da coluna |
-| Alça da letra | arraste, setas, duplo clique ou `Home` | redimensiona ou ajusta ao conteúdo |
+| Alça da letra | arraste, setas, duplo clique ou `Home` | redimensiona pela borda direita ou ajusta ao conteúdo |
 | Toolbar | copiar | TSV do intervalo selecionado ou Markdown da tabela exibida |
-| Toolbar | tela cheia | abre o diálogo com zoom de 60% a 220% |
+| Toolbar | tela cheia | abre o diálogo centralizado com zoom de 60% a 220% |
+
+A tabela começa sem nenhuma célula selecionada. Clicar fora dela limpa a
+seleção, assim como `Esc`; cliques no popover do funil, na toolbar e na própria
+grade preservam o que está selecionado.
 
 O popover do funil tem busca interna, frequência por valor, **Selecionar
 todos** e **Limpar**; o contador da toolbar considera a pesquisa global e todos
@@ -95,17 +99,26 @@ os filtros de coluna. A pesquisa abre à esquerda com fade e não desloca os
 outros botões. O pivô desliga temporariamente o cabeçalho e a ordenação e limpa
 os filtros por coluna; ao voltar, restaura o cabeçalho e a ordenação anteriores.
 
-No diálogo de tela cheia, o bloco é movido para o palco — filtros, seleção e
-larguras continuam os mesmos. Arraste para rolar, use `+`/`−` para o zoom e o
-botão de porcentagem para voltar a 100%; `Esc`, o botão de fechar ou um clique
-no fundo encerram. O zoom usa a escala do bloco, não o `font-size` do documento,
-então a grade mantém o alinhamento.
+Na tela cheia, o próprio componente passa para um diálogo centralizado, com a
+moldura e o raio originais — filtros, seleção e larguras continuam os mesmos.
+Arraste pelo título, pelo fundo da toolbar, com o botão do meio ou com `Espaço`
+pressionado para mover a tabela; arrastar sobre as células continua
+selecionando. As alças nas bordas e nos cantos redimensionam em simetria, com o
+centro fixo, entre cerca de 40% e 200% do palco, já descontado o zoom; as alças
+também respondem às setas. Use `+`/`−` para o zoom de 60% a 220% e o botão de
+porcentagem para voltar a 100% e recentralizar; duplo clique recentraliza e
+devolve o tamanho natural, mantendo o zoom. `Esc`, o botão de fechar ou um
+clique no fundo encerram. O zoom usa a escala do bloco, não o `font-size` do
+documento, então a grade mantém o alinhamento.
 
-O estado é só de memória: recarregar restaura filtros, ordenação, seleção,
-larguras e pivô. A toolbar fica escondida até o JavaScript iniciar; sem ele, a
-tabela continua legível e rolável. A grade acompanha o tamanho de fonte do
-documento; o zoom do diálogo usa uma escala própria sobre o bloco inteiro, sem
-mexer no `font-size`.
+O estado é só de memória: recarregar volta ao estado inicial de filtros,
+ordenação, seleção, larguras e pivô. A exceção é o tamanho escolhido na tela
+cheia, guardado no `sessionStorage` por documento e tabela
+(`mdprv:table-lb:v1:<documento>:<tabela>`): fechar e reabrir, ou recarregar a
+mesma aba, restaura o tamanho; uma aba nova começa no padrão. Duplo clique e o
+botão de porcentagem apagam o valor salvo. A toolbar fica escondida até o
+JavaScript iniciar; sem ele, a tabela continua legível e rolável. A grade
+acompanha o tamanho de fonte do documento.
 
 ## Fontes
 
@@ -162,6 +175,14 @@ A sensibilidade de zoom aceita valores entre 1,01 e 3.
 | Contexto | Tecla | Ação |
 | --- | --- | --- |
 | Página | `z` | Alterna o modo zen |
+| Grade de tabela | setas | Navega entre células |
+| Grade de tabela | `Shift`+clique ou `Shift`+seta | Estende a seleção a partir da âncora |
+| Grade de tabela | `Ctrl`/`Cmd`+clique | Soma um intervalo à seleção |
+| Grade de tabela | `Home` / `End` | Vai ao início ou ao fim da linha |
+| Grade de tabela | `PageUp` / `PageDown` | Pula cinco linhas |
+| Grade de tabela | `Esc` | Limpa a seleção; com a pesquisa aberta, fecha o filtro antes |
+| Tela cheia da tabela | `Espaço`+arraste | Move a tabela |
+| Tela cheia da tabela | `Esc` | Fecha; antes, fecha o popover do funil |
 | Lightbox (diagrama ou imagem) | `Esc` | Fecha |
 | Tree fence | `Enter` / `Espaço` | Expande ou recolhe |
 | Tree fence | `↑` / `↓` / `←` / `→` | Navega e recolhe/expande |

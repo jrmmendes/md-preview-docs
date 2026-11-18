@@ -1,7 +1,7 @@
 ---
 title: Markdown
 sidebar_position: 1
-description: Sintaxe, links entre documentos, frontmatter, blocos de código, diff, Mermaid, tree fences e imagens relativas.
+description: Sintaxe, links entre documentos, frontmatter, blocos de código, diff, tabelas, CSV, Mermaid, tree fences e imagens relativas.
 ---
 
 O md-preview usa `markdown-it` com HTML inline, linkify e typographer, além das
@@ -272,7 +272,8 @@ Clique em uma célula para selecioná-la; arraste, use `Shift`+clique ou
 `Ctrl`/`Cmd`+clique para intervalos e multi-intervalos. As setas navegam,
 `Shift`+seta estende a seleção, `Home`/`End` vão ao início/fim da linha,
 `PageUp`/`PageDown` pulam cinco linhas e `Esc` limpa a seleção. As faixas de
-letra e número também selecionam a coluna ou a linha inteira.
+letra e número também selecionam a coluna ou a linha inteira. Nada fica
+selecionado por padrão, e clicar fora da tabela limpa a seleção.
 
 Com o cabeçalho da primeira linha ligado, cada coluna tem um funil: ele abre um
 popover com busca de valor, frequência, **Selecionar todos** e **Limpar**. A
@@ -280,13 +281,18 @@ pesquisa global e os filtros por coluna se combinam; o contador mostra quantas
 linhas sobraram. Clicar no nome da coluna ordena em ordem crescente,
 decrescente e, no terceiro clique, volta à ordem original.
 
-Arraste a alça à direita da letra para redimensionar a coluna; duplo clique ou
-`Home` com a alça focada ajusta a coluna ao conteúdo. As setas esquerda/direita
-redimensionam em passos de 16 px.
+Arraste a alça na borda direita da letra para redimensionar a coluna; duplo
+clique ou `Home` com a alça focada ajusta a coluna ao conteúdo. As setas
+esquerda/direita redimensionam em passos de 16 px.
 
-O estado de cada tabela (filtros, ordenação, seleção, larguras, pivô e raw) vive
-apenas na memória da página. Recarregar volta ao estado inicial; nenhuma chave
-de `localStorage` é criada.
+A tela cheia move a própria grade para um diálogo centralizado, com pan, alças
+de redimensionamento e zoom de 60% a 220%. Os detalhes estão em
+[Tabelas interativas](/recursos/interface#tabelas-interativas).
+
+O estado de cada tabela (filtros, ordenação, seleção, larguras, pivô e o raw do
+bloco `csv`) vive apenas na memória da página. Recarregar volta ao estado
+inicial; nenhuma chave de `localStorage` é criada. Só o tamanho da tela cheia é
+guardado, no `sessionStorage` da aba.
 
 ```markdown
 | Página | Acessos | Status |
