@@ -50,13 +50,18 @@ alterar o original.
     "code-bg": "#0c1116",
     "quote": "#8b98a5"
   },
+  "charts": {
+    "palette": ["#4cc2a4", "#7aa2f7", "#e0af68", "#f7768e"]
+  },
   "shiki": { "light": "github-light", "dark": "github-dark" },
   "mermaid": { "theme": "dark", "overrides": {} }
 }
 ```
 
 As oito cores de `colors` são obrigatórias; as demais são derivadas. Grupos
-opcionais (`radii`, `typography`, `layout`, `effects`) caem nos padrões. O
+opcionais (`radii`, `typography`, `layout`, `effects`, `charts`) caem nos
+padrões. `charts.palette` define as cores das séries dos gráficos de tabela e é
+opcional: sem ela, o tema usa a paleta embutida do esquema claro/escuro. O
 contrato completo, com todos os tokens e faixas, está em
 [theme.json](/referencia/theme-json).
 

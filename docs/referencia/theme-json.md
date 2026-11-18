@@ -44,6 +44,7 @@ campos aceitos e os valores usados quando um grupo opcional é omitido.
 | `typography` | objeto | Não | Tamanhos e pesos |
 | `layout` | objeto | Não | Medidas CSS |
 | `effects` | objeto | Não | Sombras, durações e curvas de aceleração |
+| `charts` | objeto | Não | Paleta das séries dos gráficos de tabela |
 | `shiki` | objeto | Sim em `light`/`dark` | Paletas clara e escura |
 | `mermaid` | objeto | Sim em `light`/`dark` | Tema e overrides |
 
@@ -147,6 +148,29 @@ Medidas CSS (`rem`, `em`, `px`, `%`, `vh` etc.):
 | `duration-ui` | duração | `.18s` |
 | `easing` | string | `ease` |
 
+## `charts`
+
+Opcional e retrocompatível: temas sem este grupo continuam válidos e usam a
+paleta embutida do esquema (`light` ou `dark`).
+
+| Token | Tipo | Regra | Padrão |
+| --- | --- | --- | --- |
+| `palette` | array de cores | 1 a 12 cores seguras | paleta embutida do esquema |
+
+```json
+{
+  "charts": {
+    "palette": ["#4c78a8", "#f58518", "#e45756", "#72b7b2"]
+  }
+}
+```
+
+Cada cor vira um token `--mdprv-chart-1`, `--mdprv-chart-2`… na ordem do array.
+Os gráficos de tabela usam esses tokens, então a paleta acompanha o tema claro,
+escuro e automático sem CSS extra. Cores fora dos formatos aceitos (ou array
+vazio/maior que 12) fazem o tema cair de volta na paleta embutida; chaves
+desconhecidas dentro de `charts` continuam invalidando o arquivo.
+
 ## `shiki`
 
 Obrigatório em temas fixos. Aceita exatamente estas oito paletas:
@@ -189,7 +213,7 @@ têm 1–200 caracteres.
 ## `kind: "auto"`
 
 Um tema automático **não** declara `colors`, `radii`, `typography`, `layout`,
-`effects`, `shiki` nem `mermaid`. Ele referencia outras variantes:
+`effects`, `charts`, `shiki` nem `mermaid`. Ele referencia outras variantes:
 
 ```json
 {
@@ -214,6 +238,7 @@ Regras:
 | Nome do arquivo | Regex e correspondência com `name` |
 | Schema | Tipos, campos obrigatórios, `additionalProperties` |
 | Cores | Formato e comprimento |
+| Gráficos | 1–12 cores seguras; fallback para a paleta embutida |
 | Medidas | Unidades seguras, sem injeção |
 | Shiki | Lista fechada de oito paletas |
 | Mermaid | Enum de tema e formato dos overrides |
