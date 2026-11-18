@@ -7,6 +7,9 @@ description: Sintaxe, links entre documentos, frontmatter, blocos de código, di
 O md-preview usa `markdown-it` com HTML inline, linkify e typographer, além das
 extensões GFM de tabelas, riscado, task lists, footnotes e âncoras.
 
+Para ver a fonte do que está na tela, o botão **Raw** troca a renderização pelo
+Markdown original; veja [Markdown raw](/recursos/interface#markdown-raw).
+
 ## Sintaxe
 
 | Recurso | Sintaxe | Observação |
@@ -319,10 +322,11 @@ Campos vazios são preservados; colunas numéricas (incluindo `R$`, `%` e o
 formato pt-BR `1.234,56`) ficam alinhadas à direita e ordenam pelo valor.
 
 O botão **Raw** troca a grade pelo corpo original do fence, realçado como CSV.
-Enquanto o modo Raw do documento estiver aberto, o botão do bloco fica
-desabilitado e a grade entra em raw junto com o restante da página; ao fechar a
-visão raw do documento, o estado anterior do bloco volta. Um fence vazio ou com
-aspas não fechadas volta a ser um bloco de código.
+Enquanto o modo Raw do documento estiver aberto — a
+[raw view](/recursos/interface#markdown-raw) —, o botão do bloco fica
+desabilitado e a grade entra em raw junto com a página; ao fechar a raw view, o
+estado anterior do bloco volta. Um fence vazio ou com aspas não fechadas volta a
+ser um bloco de código.
 
 ## Mermaid
 
@@ -386,6 +390,9 @@ meu-projeto
 - clique ou `Enter`/`Espaço` alterna um diretório; as setas navegam e
   recolhem/expandem;
 - a barra de ferramentas oferece **Expandir tudo** e **Recolher tudo**;
+- o botão **Raw**, à esquerda dos botões de expandir/recolher, troca a árvore
+  pelo corpo original do fence com destaque de bash; nesse modo, os botões de
+  expandir/recolher ficam desabilitados;
 - `tree -a` (ocultos) e `tree -d` (só diretórios, detectado pelo rodapé
   `0 files`) são aceitos;
 - nomes são sempre texto escapado; se o corpo não parecer uma árvore, o fence

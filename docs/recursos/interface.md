@@ -1,12 +1,12 @@
 ---
 title: Interface
 sidebar_position: 3
-description: Layout, sumário, histórico Recent, fechar documento, tabelas interativas, cópia de código, fontes, loaders, modo zen e painel de configurações.
+description: Layout, sumário, histórico Recent, fechar documento, visão raw do Markdown, tabelas interativas, cópia de código, fontes, loaders, modo zen e painel de configurações.
 ---
 
 A página é renderizada no servidor; o JavaScript cuida de TOC, histórico,
-fontes, Mermaid, tree fences, tabelas interativas, cópia de código, loader e
-layout.
+fontes, Mermaid, tree fences, tabelas interativas, visão raw do Markdown, cópia
+de código, loader e layout.
 
 <figure>
   <img src="/img/features/ui-overview.png" alt="Tela do md-preview com sumário à esquerda, documento ao centro e histórico Recent à direita" />
@@ -120,6 +120,28 @@ botão de porcentagem apagam o valor salvo. A toolbar fica escondida até o
 JavaScript iniciar; sem ele, a tabela continua legível e rolável. A grade
 acompanha o tamanho de fonte do documento.
 
+## Markdown raw
+
+A barra flutuante no topo do documento traz os botões **Raw** e **Copy raw** —
+ela só aparece com um documento aberto. **Raw** troca o documento renderizado
+pela fonte Markdown, com o frontmatter incluído; o mesmo botão volta à leitura
+normal e `aria-pressed` marca o estado.
+
+A fonte vem do payload da página e não do corpo renderizado, então o HTML
+continua sem frontmatter. Na primeira abertura de cada documento o cliente pede
+`/__raw-highlight` ao daemon, que realça a fonte com Shiki usando o tema ativo;
+até a resposta chegar — ou se ela falhar — o texto aparece sem realce. A troca
+não muda a URL nem mexe no Recent.
+
+**Copy raw** copia a fonte intacta, com frontmatter e sem depender do realce, e
+mostra o check por cerca de 1,2 s. No modo zen a barra inteira some; com a raw
+view aberta, entrar no zen volta ao documento renderizado.
+
+Enquanto a raw view está aberta, tabelas `csv` também entram em raw e o botão
+**Raw** do bloco fica desabilitado; ao voltar ao documento, cada bloco recupera
+o estado anterior. Tabelas GFM não têm raw por bloco — a raw view do documento
+já mostra a fonte completa.
+
 ## Fontes
 
 O seletor troca a tipografia do documento. O catálogo vem do daemon, que usa
@@ -189,4 +211,4 @@ A sensibilidade de zoom aceita valores entre 1,01 e 3.
 | Seletor de fontes | `↑` / `↓`, `Enter`, `Esc` | Navega, aplica, fecha |
 
 Sem JavaScript, o documento continua legível; ficam de fora diagramas,
-histórico, TOC interativo e controles. Diffs ficam na visão inline.
+histórico, TOC interativo, visão raw e controles. Diffs ficam na visão inline.
