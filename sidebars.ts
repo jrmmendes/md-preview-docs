@@ -33,6 +33,7 @@ const sidebars: SidebarsConfig = {
       items: [
         'receitas/pipe-e-stdin',
         'receitas/criar-tema',
+        'receitas/temas-prontos',
         'receitas/neovim',
         'receitas/troubleshooting',
       ],

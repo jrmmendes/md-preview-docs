@@ -56,6 +56,14 @@ Editar um tema dispara um evento `themes`. Se o tema atual (ou uma variante de
 `auto`) mudou, a aba recarrega. Arquivos inválidos, symlinks e arquivos maiores
 que 256 KiB são ignorados com aviso.
 
+## Coleções prontas
+
+O repositório mantém coleções completas em `themes/<família>/`, fora do bundle e
+do `theme seed`. A primeira é a **Tropical**, com par claro/escuro em tons
+terrosos e quentes (ivory, coral, clay, kraft, céu e oliva): tema de cores,
+Shiki e Mermaid. Veja [Temas prontos](/receitas/temas-prontos) para a lista de
+arquivos, slugs e instalação.
+
 ## Importar um tema de cores
 
 O caminho mais rápido para adicionar um `theme.json` completo é o modal:
