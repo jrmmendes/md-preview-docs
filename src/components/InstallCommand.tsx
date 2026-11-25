@@ -1,6 +1,6 @@
 import CodeBlock from '@theme/CodeBlock';
 
-export const MD_PREVIEW_TAG = 'v1.10.0';
+export const MD_PREVIEW_TAG = 'v2.0.0';
 // Versão sem o prefixo "v", para textos que mostram o que `--version` imprime.
 export const MD_PREVIEW_VERSION = MD_PREVIEW_TAG.replace(/^v/, '');
 export const MD_PREVIEW_REPO = 'https://github.com/jrmmendes/md-preview.git';
@@ -10,8 +10,8 @@ export type MdPreviewAsset = 'linux-x64' | 'linux-arm64';
 
 // sha256 publicado no asset `<nome>.sha256` da mesma release.
 export const MD_PREVIEW_SHA256: Record<MdPreviewAsset, string> = {
-  'linux-x64': '99ce0f79bc01e4815c3faeb9e092011930b6fda1a58cb04213a9410dad2875df',
-  'linux-arm64': 'ce51129f60c5b06a0248b1022bca7a3035b45ad0f9c862bba748842c77844d3a',
+  'linux-x64': '3d53159d8af9e06983370678a4f6a34a5d4c0e9c9be6caba93c3b296d6b5f9f3',
+  'linux-arm64': '516648d302461d9555fe3879af3f741aede4ae77070253f15c65783da88308e4',
 };
 
 export function downloadCommand(asset: MdPreviewAsset) {
