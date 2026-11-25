@@ -116,6 +116,7 @@ letra ou número para selecionar a coluna ou a linha inteira.
 | Contexto | Controle | Ação |
 | --- | --- | --- |
 | Grade | clique, arraste | seleciona célula ou intervalo |
+| Grade | duplo clique, duplo toque ou `Enter` | abre o conteúdo completo da célula |
 | Grade | `Shift`+clique/seta | estende a seleção a partir da âncora |
 | Grade | `Ctrl`/`Cmd`+clique | soma um novo intervalo à seleção |
 | Grade | setas, `Home`/`End`, `PageUp`/`PageDown` | navega entre células |
@@ -129,6 +130,26 @@ letra ou número para selecionar a coluna ou a linha inteira.
 A tabela começa sem nenhuma célula selecionada. Clicar fora dela limpa a
 seleção, assim como `Esc`; cliques no popover do funil, na toolbar e na própria
 grade preservam o que está selecionado.
+
+Em **Widgets → Tabelas**, **Quebra automática de linhas** (desligada por padrão)
+faz células e cabeçalhos longos quebrarem em várias linhas e a altura da linha
+acompanhar o conteúdo, em vez de truncar com reticências. A opção vale para a
+grade normal, a tela cheia e estados filtrados/ordenados; o painel de detalhe da
+lightbox continua com leitura em `pre-wrap`.
+
+Duplo clique (ou duplo toque no celular) em uma célula de dados abre o conteúdo
+completo na **mesma lightbox** da tela cheia, mesmo quando a grade trunca o
+texto. `Enter` faz o mesmo na célula ativa. O título mostra a coluna e a linha
+visível, o corpo preserva quebras de linha e o HTML já renderizado na grade (sem
+re-renderizar Markdown), e **Copiar** leva o texto para a área de transferência
+com o aviso **Copiado**. A entrada de texto herda o backdrop desfocado, o **X**,
+o `Esc`, o foco preso, as alças de redimensionamento, o zoom de 60% a 220% e o
+arraste pelo título ou com `Espaço`; duplo clique no título recentraliza sem
+resetar o zoom. Cabeçalhos, alças de redimensionamento e links/botões dentro da
+célula não abrem o detalhe. Ao abrir a partir da tabela em tela cheia, a tabela
+volta ao documento e a mesma lightbox passa a mostrar o detalhe — há um único
+backdrop. Fechar devolve o foco à célula de origem; se o detalhe foi aberto da
+tela cheia, a tabela permanece no documento (não reabre em tela cheia).
 
 O popover do funil tem busca interna, frequência por valor, **Selecionar
 todos** e **Limpar**; o contador da toolbar considera a pesquisa global e todos
@@ -281,7 +302,8 @@ Cada bloco tem três ações em ícones à direita do título:
 
 Em **Gráficos**, o menu de exemplo (camadas) fica na mesma linha, à esquerda
 desses ícones. As prévias do modal já mostram o rascunho; nada muda no documento
-antes de salvar. Fonte, loader, zoom e modos simples aplicam ao salvar; Shiki e
+antes de salvar. Fonte, loader, zoom, modos simples e quebra automática de
+linhas aplicam ao salvar; Shiki e
 Mermaid são renderizados no servidor e exigem **um único reload**, preservando a
 rota do documento e exibindo o loader.
 
@@ -291,14 +313,18 @@ rota do documento e exibindo o loader.
 | --- | --- | --- |
 | Sensibilidade do zoom (Mermaid) | `localStorage` `mdprv_zoom_sensitivity` | `1.1` |
 | Modo de tabela simples | `localStorage` `mdprv_simple_table` | desligado |
+| Quebra automática de linhas | `localStorage` `mdprv_table_wrap` | desligado |
 | Modo de diff simples | `localStorage` `mdprv_simple_diff` | desligado |
 
 A sensibilidade de zoom aceita valores entre 1,01 e 3, em passos de 0,05, e vale
 para a tela cheia dos diagramas depois de salvar. O modo de tabela simples oculta
 as letras, os números e a moldura de planilha, mantendo filtros, seleção e
-gráficos. O modo de diff simples oculta metadados de arquivo e cabeçalhos de hunk
-— veja [Diff fences](/recursos/markdown#modo-simples-de-diff). Os três controles
-entram no mesmo rascunho do modal e só são gravados ao salvar.
+gráficos. A quebra automática de linhas faz células e cabeçalhos longos crescerem
+em várias linhas, em vez de truncar com reticências; desligada, mantém o
+comportamento compacto de uma linha. O modo de diff simples oculta metadados de
+arquivo e cabeçalhos de hunk — veja
+[Diff fences](/recursos/markdown#modo-simples-de-diff). Os controles entram no
+mesmo rascunho do modal e só são gravados ao salvar.
 
 ### Sistema
 
@@ -312,8 +338,8 @@ A página Sistema é somente leitura:
 - **Restaurar padrões** — limpa apenas as preferências locais do modal
   (`mdprv_theme`, `mdprv_font`, `mdprv_loader`, `mdprv_blocks`, `mdprv_shiki`,
   `mdprv_mermaid`, `mdprv_prefs`, `mdprv_zoom_sensitivity`, `mdprv_simple_table`,
-  `mdprv_simple_diff`) e recarrega no tema padrão. Largura do conteúdo e colunas
-  recolhidas são mantidas.
+  `mdprv_table_wrap`, `mdprv_simple_diff`) e recarrega no tema padrão. Largura do
+  conteúdo e colunas recolhidas são mantidas.
 
 ### O que fica salvo
 
@@ -340,13 +366,17 @@ cookies inválidos.
 | Configurações | `Ctrl+S` / `Cmd+S` | Salva o rascunho do modal |
 | Configurações | `Esc` | Fecha e descarta o rascunho |
 | Grade de tabela | setas | Navega entre células |
+| Grade de tabela | `Enter` | Abre o detalhe da célula ativa |
 | Grade de tabela | `Shift`+clique ou `Shift`+seta | Estende a seleção a partir da âncora |
 | Grade de tabela | `Ctrl`/`Cmd`+clique | Soma um intervalo à seleção |
 | Grade de tabela | `Home` / `End` | Vai ao início ou ao fim da linha |
 | Grade de tabela | `PageUp` / `PageDown` | Pula cinco linhas |
 | Grade de tabela | `Esc` | Limpa a seleção; com a pesquisa aberta, fecha o filtro antes |
-| Tela cheia da tabela | `Espaço`+arraste | Move a tabela |
-| Tela cheia da tabela | `Esc` | Fecha; antes, fecha o popover do funil |
+| Detalhe da célula | `Esc` | Fecha e devolve o foco à célula |
+| Detalhe da célula | `Tab` / `Shift`+`Tab` | Percorre as ações sem sair da lightbox |
+| Detalhe da célula | `Espaço`+arraste | Move o painel de texto |
+| Lightbox da tabela | `Espaço`+arraste | Move a tabela |
+| Lightbox da tabela | `Esc` | Fecha; antes, fecha o popover do funil |
 | Lightbox (diagrama ou imagem) | `Esc` | Fecha |
 | Tree fence | `Enter` / `Espaço` | Expande ou recolhe |
 | Tree fence | `↑` / `↓` / `←` / `→` | Navega e recolhe/expande |

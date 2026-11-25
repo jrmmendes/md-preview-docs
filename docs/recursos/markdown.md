@@ -298,11 +298,26 @@ Clique em uma célula para selecioná-la; arraste, use `Shift`+clique ou
 letra e número também selecionam a coluna ou a linha inteira. Nada fica
 selecionado por padrão, e clicar fora da tabela limpa a seleção.
 
+Para ler um texto longo que a grade trunca, dê duplo clique na célula (ou duplo
+toque no celular) ou pressione `Enter` na célula ativa. O detalhe abre na
+**mesma lightbox** da tela cheia: backdrop desfocado, fechar por `Esc`/`X`,
+foco preso, zoom de 60% a 220%, alças de redimensionamento e arraste pelo título
+(ou `Espaço`+arraste); duplo clique no título recentraliza. O conteúdo completo
+preserva quebras de linha e o HTML já renderizado, e **Copiar** fica no chrome
+da lightbox com o aviso **Copiado**. Fechar devolve o foco à célula. Cabeçalhos,
+alças e links/botões dentro da célula não são afetados.
+
 Com o cabeçalho da primeira linha ligado, cada coluna tem um funil: ele abre um
 popover com busca de valor, frequência, **Selecionar todos** e **Limpar**. A
 pesquisa global e os filtros por coluna se combinam; o contador mostra quantas
 linhas sobraram. Clicar no nome da coluna ordena em ordem crescente,
 decrescente e, no terceiro clique, volta à ordem original.
+
+Em **Widgets → Tabelas**, **Quebra automática de linhas** (`mdprv_table_wrap`,
+desligada por padrão) troca o truncamento com reticências por células e
+cabeçalhos que quebram em várias linhas, com a altura da linha acompanhando o
+conteúdo. Vale na grade normal, na tela cheia e com filtros/ordenação ativos; o
+painel de detalhe da lightbox continua usando `pre-wrap` para leitura.
 
 Arraste a alça na borda direita da letra para redimensionar a coluna; duplo
 clique ou `Home` com a alça focada ajusta a coluna ao conteúdo. As setas
