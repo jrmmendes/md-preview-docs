@@ -17,8 +17,16 @@ ${XDG_CONFIG_HOME:-~/.config}/md-preview/
     ├── auto.json
     ├── nord.json
     ├── theme.schema.json
-    └── meu-tema.json      # temas de usuário
+    ├── meu-tema.json      # temas de usuário
+    ├── minha-paleta.shiki.json    # tema Shiki importado
+    └── meu-diagrama.mermaid.json  # tema Mermaid importado
 ```
+
+Importar pelo modal grava nessa pasta com modo `0600` e nunca sobrescreve um
+arquivo existente. O daemon observa a pasta: criar, editar ou remover um dos
+três formatos emite SSE (`themes`, `shiki-themes` ou `mermaid-themes`) e atualiza
+catálogo/menus sem reiniciar. Veja [Temas Shiki](/referencia/temas-shiki) e
+[Temas Mermaid](/referencia/temas-mermaid).
 
 `MDPRV_CONFIG_DIR` substitui a raiz inteira. `theme path` imprime os caminhos
 efetivos.

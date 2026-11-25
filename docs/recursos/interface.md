@@ -1,7 +1,7 @@
 ---
 title: Interface
 sidebar_position: 3
-description: Layout, sumário, histórico Recent, fechar documento, visão raw do Markdown, tabelas interativas, cópia de código, fontes, loaders, modo zen e painel de configurações.
+description: Layout, sumário, histórico Recent, fechar documento, visão raw do Markdown, tabelas interativas, cópia de código, fontes, loaders, modo zen e modal de configurações.
 ---
 
 A página é renderizada no servidor; o JavaScript cuida de TOC, histórico,
@@ -104,7 +104,7 @@ todas as abas forem fechadas, a próxima execução abre o navegador normalmente
 Passar o cursor ou focar um bloco `pre` (que não seja Mermaid) revela o botão
 **Copy**, que usa a API Clipboard. Blocos Mermaid e
 [diff](/recursos/markdown#diff-fences) têm controles próprios e não recebem o
-botão.
+botão: o diff copia o patch e o diagrama Mermaid copia o desenho como imagem.
 
 ## Tabelas interativas
 
@@ -213,31 +213,132 @@ Ativado pelo botão da barra ou pela tecla `z`. Esconde as colunas laterais e n�
 é persistido: recarregar volta ao layout normal. A tecla é ignorada quando o
 foco está em campos de texto ou há `Ctrl`, `Cmd` ou `Alt` pressionado.
 
-## Painel de configurações
+## Configurações
+
+O botão de engrenagem no canto inferior esquerdo (ou `Ctrl+,` / `Cmd+,`) abre o
+modal de configurações. A barra lateral tem **Temas** (com as páginas **Temas**
+e **Importar**), **Aparência**, **Widgets** e **Sistema**. `Esc`, o botão de
+fechar ou um clique fora fecham o modal; ao fechar, a âncora original do
+documento é restaurada.
+
+O modal usa o fluxo **rascunho → salvar**: nenhuma alteração toca o documento,
+cookies ou `localStorage` antes de **Salvar** (ícone de disquete ao lado do
+fechar ou `Ctrl`/`Cmd`+`S`). Com alterações pendentes, a borda do modal fica
+destacada e a região viva anuncia “Alterações não salvas”; o disquete some
+quando não há nada para salvar. Fechar por `Esc`, `X` ou clique fora descarta o
+rascunho silenciosamente e reabrir mostra os valores efetivos. Salvar aplica
+tudo de uma vez; se tema, Shiki ou Mermaid mudaram, a página recarrega uma única
+vez com o loader e o modal reabre na mesma rota.
 
 <figure>
-  <img src="/img/features/settings-panel.png" alt="Painel de configurações com seletor de tema, fonte, loader e sensibilidade de zoom" />
-  <figcaption>O painel reúne tema, fonte, loader e sensibilidade de zoom.</figcaption>
+  <img src="/img/features/settings-modal.png" alt="Modal de configurações aberto na página Temas, com a grade de temas" />
+  <figcaption>O modal reúne Temas, Aparência, Widgets e Sistema em uma janela única.</figcaption>
 </figure>
+
+### Temas
+
+A página **Temas** mostra a grade dos nove temas embutidos (mais os temas de
+usuário). A escolha fica no rascunho e só é aplicada ao salvar: cookie
+`mdprv_theme`, CSS de `/__theme-css` e atributos `data-theme`/`data-scheme`.
+Fonte, loader, código e gráficos não personalizados passam a herdar o preset do
+tema escolhido. O bloco **Tema** tem um ícone de importar que leva a
+**Temas → Importar**.
+
+### Importar
+
+A página **Importar** (`Temas → Importar`) reúne os três importadores em
+blocos iguais: campo de nome, textarea ou arquivo, validação inline e lista dos
+temas importados com ação **Remover**.
+
+| Bloco | Aceita | Endpoint |
+| --- | --- | --- |
+| Tema de cores | `theme.json` completo | `POST/DELETE /__themes` |
+| Tema Shiki | `.shiki.json` ou tema VS Code/TextMate cru | `POST/DELETE /__shiki-themes` |
+| Tema Mermaid | `.mermaid.json` | `POST/DELETE /__mermaid-themes` |
+
+Importar apenas adiciona o tema ao catálogo. Para usá-lo, escolha-o na grade de
+**Temas** ou nos menus Claro/Escuro dos blocos **Código** e **Gráficos** em
+**Aparência**. Os menus continuam listando embutidos e importados; o ícone de
+importar (seta para bandeja) no cabeçalho dos blocos **Código**, **Gráficos** e
+**Tema** leva de volta à página Importar.
+
+### Aparência
+
+| Bloco | O que ajusta |
+| --- | --- |
+| Fonte | Família usada no documento; catálogo do sistema + Google Fonts |
+| Loader | Uma das seis animações de carregamento |
+| Código | Tema Shiki claro e escuro, com prévia real do código |
+| Gráficos | Tema Mermaid claro e escuro, com prévia dos diagramas |
+
+Cada bloco tem três ações em ícones à direita do título:
+
+| Ícone | Ação |
+| --- | --- |
+| Lápis | Liga/desliga **Personalizar**. Desligado, o bloco segue o preset do tema; ligado, os valores ficam no rascunho e, ao salvar, vão para o navegador |
+| Seta circular | **Restaurar do tema**: volta os valores ao preset atual mantendo a personalização; fica desabilitada quando o bloco não está personalizado |
+| Seta para bandeja | **Importar tema…**: abre **Temas → Importar** (só em Código, Gráficos e no bloco Tema) |
+
+Em **Gráficos**, o menu de exemplo (camadas) fica na mesma linha, à esquerda
+desses ícones. As prévias do modal já mostram o rascunho; nada muda no documento
+antes de salvar. Fonte, loader, zoom e modos simples aplicam ao salvar; Shiki e
+Mermaid são renderizados no servidor e exigem **um único reload**, preservando a
+rota do documento e exibindo o loader.
+
+### Widgets
 
 | Controle | Persistência | Padrão |
 | --- | --- | --- |
-| Tema | cookie `mdprv_theme` | `auto` |
-| Fonte | `localStorage` `mdprv_font` | sistema |
-| Loader | `localStorage` `mdprv_loader` | `classic` |
-| Zoom do Mermaid | `localStorage` `mdprv_zoom_sensitivity` | `1.1` |
-| Modo simples de diff | `localStorage` `mdprv_simple_diff` | desligado |
+| Sensibilidade do zoom (Mermaid) | `localStorage` `mdprv_zoom_sensitivity` | `1.1` |
+| Modo de tabela simples | `localStorage` `mdprv_simple_table` | desligado |
+| Modo de diff simples | `localStorage` `mdprv_simple_diff` | desligado |
 
-A sensibilidade de zoom aceita valores entre 1,01 e 3. O modo simples de diff
-oculta metadados de arquivo e cabeçalhos de hunk, deixando só as linhas de
-adição, remoção e contexto — veja
-[Diff fences](/recursos/markdown#modo-simples-de-diff).
+A sensibilidade de zoom aceita valores entre 1,01 e 3, em passos de 0,05, e vale
+para a tela cheia dos diagramas depois de salvar. O modo de tabela simples oculta
+as letras, os números e a moldura de planilha, mantendo filtros, seleção e
+gráficos. O modo de diff simples oculta metadados de arquivo e cabeçalhos de hunk
+— veja [Diff fences](/recursos/markdown#modo-simples-de-diff). Os três controles
+entram no mesmo rascunho do modal e só são gravados ao salvar.
+
+### Sistema
+
+A página Sistema é somente leitura:
+
+- **Daemon** — porta, minutos de inatividade e se os temas embutidos são copiados
+  ao iniciar. Os valores vêm de `config.json` e das variáveis `MDPRV_*`; mudanças
+  exigem reiniciar o daemon.
+- **Caminhos** — arquivo de configuração, diretório de temas e arquivo de
+  estado, com botão para copiar.
+- **Restaurar padrões** — limpa apenas as preferências locais do modal
+  (`mdprv_theme`, `mdprv_font`, `mdprv_loader`, `mdprv_blocks`, `mdprv_shiki`,
+  `mdprv_mermaid`, `mdprv_prefs`, `mdprv_zoom_sensitivity`, `mdprv_simple_table`,
+  `mdprv_simple_diff`) e recarrega no tema padrão. Largura do conteúdo e colunas
+  recolhidas são mantidas.
+
+### O que fica salvo
+
+| Preferência | Onde |
+| --- | --- |
+| Tema | cookie `mdprv_theme` |
+| Shiki e Mermaid personalizados | `localStorage` `mdprv_shiki` / `mdprv_mermaid` + cookie `mdprv_prefs` |
+| Quais blocos estão personalizados | `localStorage` `mdprv_blocks` |
+| Fonte | `localStorage` `mdprv_font` |
+| Loader | `localStorage` `mdprv_loader` |
+| Zoom, tabela e diff simples | `localStorage` `mdprv_zoom_sensitivity`, `mdprv_simple_table`, `mdprv_simple_diff` |
+
+O cookie `mdprv_prefs` carrega somente Shiki e Mermaid, como transporte para o
+renderizador do daemon; o servidor valida os nomes contra as allowlists e ignora
+cookies inválidos.
+
 
 ## Atalhos
 
 | Contexto | Tecla | Ação |
 | --- | --- | --- |
 | Página | `z` | Alterna o modo zen |
+| Página | `Ctrl+,` / `Cmd+,` | Abre ou fecha as configurações |
+| Configurações | `Ctrl+S` / `Cmd+S` | Salva o rascunho do modal |
+| Configurações | `Esc` | Fecha e descarta o rascunho |
 | Grade de tabela | setas | Navega entre células |
 | Grade de tabela | `Shift`+clique ou `Shift`+seta | Estende a seleção a partir da âncora |
 | Grade de tabela | `Ctrl`/`Cmd`+clique | Soma um intervalo à seleção |

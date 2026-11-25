@@ -20,7 +20,7 @@ em [Instalação](/primeiros-passos/instalacao).
 ## 2. Confira a instalação
 
 ```bash
-md-preview --version    # 1.4.1
+md-preview --version    # imprime a versão do binário
 ```
 
 Se o comando não for encontrado, `~/.local/bin` não está no `PATH`:
@@ -68,7 +68,7 @@ md-preview ola.md --theme nord --open-browser
 ```
 
 A URL sai com `?theme=nord`, que vale para essa invocação. Também é possível
-trocar pelo painel de configurações da página ou fixar um tema em
+trocar pelo modal de configurações da página ou fixar um tema em
 `config.json`. A precedência completa está em [Temas](/recursos/temas).
 
 O daemon encerra sozinho após 15 minutos sem atividade. Para parar agora:

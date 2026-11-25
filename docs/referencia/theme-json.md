@@ -45,6 +45,7 @@ campos aceitos e os valores usados quando um grupo opcional é omitido.
 | `layout` | objeto | Não | Medidas CSS |
 | `effects` | objeto | Não | Sombras, durações e curvas de aceleração |
 | `charts` | objeto | Não | Paleta das séries dos gráficos de tabela |
+| `loader` | string | Não | `classic`, `dots`, `bars`, `ring`, `pulse` ou `braille`; omitido = `classic` |
 | `shiki` | objeto | Sim em `light`/`dark` | Paletas clara e escura |
 | `mermaid` | objeto | Sim em `light`/`dark` | Tema e overrides |
 
@@ -171,31 +172,59 @@ escuro e automático sem CSS extra. Cores fora dos formatos aceitos (ou array
 vazio/maior que 12) fazem o tema cair de volta na paleta embutida; chaves
 desconhecidas dentro de `charts` continuam invalidando o arquivo.
 
+## `loader`
+
+Preset do indicador de carregamento do tema. Opcional em temas fixos:
+
+| Campo | Obrigatório | Valores |
+| --- | --- | --- |
+| `loader` | Não | `classic`, `dots`, `bars`, `ring`, `pulse`, `braille` |
+
+Omitir equivale a `classic`. Arquivos antigos sem `loader` continuam válidos e
+renderizam `classic`; `theme seed` não sobrescreve cópias existentes, então a
+cópia só passa a usar outro preset após edição manual. A precedência é
+`MDPRV_LOADER` > `config.json.loader` > preset do tema > `classic`. Um tema
+`auto` **não** declara `loader`: cada variante traz o seu.
+
+```json
+{ "loader": "dots" }
+```
+
 ## `shiki`
 
-Obrigatório em temas fixos. Aceita exatamente estas oito paletas:
+Obrigatório em temas fixos. Cada slot aceita qualquer um dos **65 temas
+embutidos** de `@shikijs/themes@3.23.0` (de `github-light` a `tokyo-night`,
+passando por `catppuccin-mocha`, `one-dark-pro`, `rose-pine`, etc.) ou um
+**slug custom** importado pelo modal no formato `^[a-z0-9][a-z0-9-]{0,31}$`.
 
 | Campo | Valores permitidos |
 | --- | --- |
-| `light` | `github-light`, `github-dark`, `dracula`, `nord`, `solarized-dark`, `solarized-light`, `gruvbox-dark-medium`, `gruvbox-light-medium` |
-| `dark` | os mesmos oito valores |
+| `light` | Nome embutido ou slug custom (`minha-paleta`) |
+| `dark` | Nome embutido ou slug custom |
 
 ```json
-{ "shiki": { "light": "github-light", "dark": "nord" } }
+{ "shiki": { "light": "github-light", "dark": "tokyo-night" } }
 ```
 
 As duas paletas são usadas na saída dupla; alternar claro/escuro não renderiza
-o código de novo.
+o código de novo. Se o slug custom não existir na máquina que abrir o
+documento, a resolução cai em `github-light`/`github-dark` no slot ausente — o
+tema continua portável, mas o código não usa a paleta importada. Veja
+[temas Shiki](/referencia/temas-shiki) para importar e remover um tema custom.
 
 ## `mermaid`
 
 | Campo | Obrigatório | Regra |
 | --- | --- | --- |
-| `theme` | Sim | `default`, `neutral`, `dark`, `forest` ou `base` |
+| `theme` | Sim | `default`, `neutral`, `dark`, `forest`, `base` ou slug custom (`^[a-z0-9][a-z0-9-]{0,63}$`) |
 | `overrides` | Sim | Objeto de strings; até 512 chaves |
 
 Chaves de `overrides` começam com letra e contêm apenas letras e números. Valores
-têm 1–200 caracteres.
+têm 1–200 caracteres. Quando `theme` é um slug custom importado como
+`<slug>.mermaid.json`, o render envia `{ theme: <base do arquivo>, themeVariables:
+<variables do arquivo> }` e ignora os `overrides`. Se o slug não existir na
+máquina, o render cai no embutido `default` e registra um aviso. Veja
+[Temas Mermaid](/referencia/temas-mermaid).
 
 ```json
 {
@@ -213,7 +242,8 @@ têm 1–200 caracteres.
 ## `kind: "auto"`
 
 Um tema automático **não** declara `colors`, `radii`, `typography`, `layout`,
-`effects`, `charts`, `shiki` nem `mermaid`. Ele referencia outras variantes:
+`effects`, `charts`, `shiki`, `mermaid` nem `loader`. Ele referencia outras
+variantes:
 
 ```json
 {
@@ -240,7 +270,7 @@ Regras:
 | Cores | Formato e comprimento |
 | Gráficos | 1–12 cores seguras; fallback para a paleta embutida |
 | Medidas | Unidades seguras, sem injeção |
-| Shiki | Lista fechada de oito paletas |
+| Shiki | Embutido da lista de 65 ou slug custom válido; verifica existência no runtime |
 | Mermaid | Enum de tema e formato dos overrides |
 | Armazenamento | Tamanho ≤ 256 KiB e ausência de symlink |
 

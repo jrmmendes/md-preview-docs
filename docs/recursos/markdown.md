@@ -127,7 +127,9 @@ realce, e não quebram a página. As paletas permitidas em um tema estão em
 Um fence `diff` transforma uma saída unificada (`git diff`, `diff -u`) em um
 bloco com numeração antiga e nova, contexto, adições e remoções. As cores vêm
 do tema ativo. Trechos colados sem cabeçalho também funcionam, sem numeração —
-veja [Diff simples](#diff-simples).
+veja [Diff simples](#diff-simples). A moldura, a fonte e o espaçamento são os
+mesmos de um [bloco de código](#blocos-de-código), então diffs e fences comuns
+ficam alinhados na página.
 
 ````markdown
 ```diff
@@ -250,12 +252,15 @@ abre na última visão usada.
 As duas visões já vêm renderizadas do servidor. Sem JavaScript, o bloco continua
 legível na visão inline; só a troca fica indisponível.
 
-Diffs com mais de 2000 linhas são renderizados sem realce de sintaxe. Blocos
-`diff` não têm botão de copiar.
+Diffs com mais de 2000 linhas são renderizados sem realce de sintaxe. O botão de
+copiar patch, na barra do bloco, copia as linhas de código como um patch
+simplificado: contexto com um espaço inicial, `+` nas adições e `-` nas
+remoções. Cabeçalhos de arquivo e linhas `@@` ficam de fora, e o texto é sempre
+lido da visão inline — copiar da visão lado a lado dá o mesmo resultado.
 
 ### Modo simples de diff
 
-O painel de configurações tem a opção **Modo simples de diff**. Com ela ligada,
+O [modal de configurações](/recursos/interface#configurações) tem a opção **Modo de diff simples**. Com ela ligada,
 todo diff da página — inclusive uma saída completa do `git diff` — mostra
 apenas as linhas de adição, remoção e contexto. Os metadados de arquivo
 (`diff --git`, `index`, o par `---`/`+++`, `new file mode`, `rename from`/`to`,
@@ -362,8 +367,11 @@ JavaScript, o bloco aparece como texto. Cada diagrama recebe o botão **View
 diagram full screen**; o clique no diagrama em si não abre nada.
 
 No lightbox, use a rolagem do mouse ou os botões para dar zoom, o botão de
-porcentagem para voltar a 100%, e arraste para mover o diagrama. `Esc`, o botão
-de fechar ou um clique no fundo encerram a visualização.
+porcentagem para voltar a 100%, e arraste para mover o diagrama. O véu do
+fullscreen segue o tema ativo, então temas claros mantêm o contraste. Enquanto a
+visualização está aberta, a seleção de texto fica bloqueada: arrastar move o
+diagrama em vez de selecionar. `Esc`, o botão de fechar ou um clique no fundo
+encerram a visualização.
 
 O botão **Copy diagram as image** gera um PNG do diagrama. Se a área de
 transferência de imagem não estiver disponível — ou a geração do PNG falhar —,

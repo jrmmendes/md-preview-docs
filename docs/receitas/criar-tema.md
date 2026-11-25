@@ -87,6 +87,15 @@ md-preview documento.md --theme meu-tema --open-browser
 Editar o JSON dispara o evento `themes`; se o tema atual mudou, a aba recarrega.
 Não é preciso reiniciar o daemon.
 
+## 5. Ou importe pelo modal
+
+Se você já tem o `theme.json` pronto, não precisa copiar pela CLI: em
+**Temas → Importar → Tema de cores**, cole o JSON ou selecione o arquivo. O
+modal valida com o mesmo `validateTheme`, grava `themes/<slug>.json` (modo
+`0600`, sem sobrescrever) e adiciona o tema à grade de **Temas**. Temas
+embutidos não podem ser sobrescritos nem removidos; o painel também lista os
+importados com **Remover**.
+
 ## Limites
 
 - arquivo maior que 256 KiB é ignorado com aviso;

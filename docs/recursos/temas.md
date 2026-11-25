@@ -55,3 +55,31 @@ para criar um tema, siga [Criar tema](/receitas/criar-tema).
 Editar um tema dispara um evento `themes`. Se o tema atual (ou uma variante de
 `auto`) mudou, a aba recarrega. Arquivos inválidos, symlinks e arquivos maiores
 que 256 KiB são ignorados com aviso.
+
+## Importar um tema de cores
+
+O caminho mais rápido para adicionar um `theme.json` completo é o modal:
+**Temas → Importar → Tema de cores**. Cole o arquivo ou selecione o `.json`,
+confirme o slug e clique em **Importar**. O servidor valida com o mesmo
+`validateTheme` da CLI, grava `themes/<slug>.json` de forma atômica (`0600`),
+sem sobrescrever arquivo ou nome embutido, e o tema entra na grade de **Temas**.
+Erros aparecem inline. O painel também remove temas de usuário
+(`DELETE /__themes/<slug>`); embutidos não podem ser apagados.
+
+Equivalente pela CLI: salve o arquivo em `themes/` e rode
+`md-preview theme validate <arquivo>`.
+
+## Temas de diagramas (Mermaid)
+
+Os menus do bloco **Gráficos** listam os cinco temas embutidos e qualquer
+`<slug>.mermaid.json` importado. **Temas → Importar → Tema Mermaid** aceita o
+arquivo e adiciona o tema ao catálogo. O formato e a resolução estão em
+[Temas Mermaid](/referencia/temas-mermaid).
+
+## Temas de código (Shiki)
+
+Além do tema da página, o bloco de código aceita qualquer um dos 65 temas
+Shiki embutidos e temas custom importados pelo modal (`.shiki.json` em
+`~/.config/md-preview/themes`). Importar não altera o tema ativo: a escolha é
+feita nos cards Claro/Escuro do bloco **Código** da página Aparência. Veja
+[Temas Shiki](/referencia/temas-shiki).

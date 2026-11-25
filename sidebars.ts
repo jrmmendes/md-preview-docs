@@ -44,6 +44,8 @@ const sidebars: SidebarsConfig = {
       items: [
         'referencia/cli',
         'referencia/theme-json',
+        'referencia/temas-shiki',
+        'referencia/temas-mermaid',
         'referencia/daemon',
         'referencia/caminhos',
       ],
